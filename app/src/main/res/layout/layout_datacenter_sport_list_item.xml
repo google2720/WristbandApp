@@ -1,0 +1,21 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff">
+
+    <TextView
+        android:id="@+id/tv_sport_item_date"
+        style="@style/style_datacenter_text1"
+        android:paddingLeft="5dp" />
+
+    <TextView
+        android:id="@+id/tv_sport_item_step"
+        style="@style/style_datacenter_text"
+        android:layout_centerInParent="true" />
+
+    <TextView
+        android:id="@+id/tv_sport_item_energy"
+        style="@style/style_datacenter_text"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

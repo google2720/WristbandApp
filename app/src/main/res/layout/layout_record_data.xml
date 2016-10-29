@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_bg"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_corners_all"
+        android:orientation="horizontal" >
+        <Button
+            android:id="@+id/btn_datarecord_step"
+            style="@style/style_datacenter_btn"
+            android:background="@drawable/record_data_sport"
+            android:text="@string/datacenter_sport"
+            android:textColor="@color/data_bar_label" />
+        <Button
+            android:id="@+id/btn_datarecord_sleep"
+            style="@style/style_datacenter_btn"
+            android:background="@drawable/record_data_sleep"
+            android:text="@string/datacenter_sleep"
+            android:textColor="@color/data_bar_label" />
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

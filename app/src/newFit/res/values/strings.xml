@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">EasyFit+</string>
+    <string name="sos_sms_body">[EasyFit+提醒]我需要您的帮助，请尽快和TA联系！</string>
+</resources>

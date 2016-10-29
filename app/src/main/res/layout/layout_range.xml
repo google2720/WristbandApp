@@ -1,0 +1,36 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/theme_bg" >
+    
+     <TextView
+        android:id="@+id/tv_range_myrange"
+        style="@style/style_range_text3"
+        android:text="@string/range_myrange" />
+     
+     <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="#dedfe1" />
+ 
+     <include layout="@layout/layout_range_list_item"/>  
+     
+      <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="#dedfe1" />
+      
+      <TextView
+        style="@style/style_range_text3"
+        android:text="@string/range_currange" />
+      
+      <ListView 
+          android:id="@+id/lv_range"
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent"
+          android:layout_gravity="center"
+          android:dividerHeight="1dp"
+          android:divider="#dedfe1"/>
+</LinearLayout>

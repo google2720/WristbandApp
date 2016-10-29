@@ -1,0 +1,66 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+    signingConfigs {
+        config {
+            keyAlias 'iap'
+            keyPassword 'scse123456tydc'
+            storeFile file('signature')
+            storePassword 'scse123456tydc'
+        }
+    }
+    defaultConfig {
+        applicationId "com.canice.wristbandapp"
+        minSdkVersion 18
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.config
+        }
+        release {
+            signingConfig signingConfigs.config
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        oldFit {
+            applicationId 'com.canice.wristbandapp1'
+            buildConfigField "boolean", "newFit", "false"
+            versionName "1.1.5"
+            manifestPlaceholders = [UMENG_APPKEY: '58143a215312dda299003521', TENCENT_APPID:'1105683981']
+        }
+        newFit {
+            applicationId 'com.canice.wristbandapp'
+            buildConfigField "boolean", "newFit", "true"
+            versionName "2.1.5"
+            manifestPlaceholders = [UMENG_APPKEY: '5722f498e0f55adccf002f43', TENCENT_APPID:'1105459075']
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent + "/${variant.buildType.name}",
+                    "EasyFit-${variant.productFlavors[0].name}-${variant.buildType.name}-v${variant.versionName}.apk")
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'junit:junit:4.12'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+}

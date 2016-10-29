@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_bg">
+
+    <LinearLayout
+        android:id="@+id/loginLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/green_theme"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.canice.wristbandapp.widget.CircleImageView
+                android:id="@+id/imageview_user_head"
+                android:layout_width="@dimen/personal_user_imWH"
+                android:layout_height="@dimen/personal_user_imWH"
+                android:layout_marginTop="@dimen/personal_user_marginTop"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/nick_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/rl_personal_profile"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/data"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_info"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/rl_personal_target"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/target"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_practise"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/rl_personal_remind"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/bell"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_remind"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/rl_personal_clock"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/clock"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_clock"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/rl_personal_call_remind"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_call_remind"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_call_remind"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/rl_personal_anti_lost"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_antilost"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_anti_lost"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/personal_sos_setup"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_sos"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_sos_setup"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/rl_personal_device"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/setup"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_device"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/rl_personal_about"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/i"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_about"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/rl_personal_datacenter"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/datacenter"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/personal_datacenter"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/rl_personal_language"
+            style="@style/function_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_language"
+            android:drawableRight="@drawable/arrow"
+            android:text="@string/language_set"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/text_color" />
+    </LinearLayout>
+</ScrollView>

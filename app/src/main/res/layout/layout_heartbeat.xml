@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loginLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/theme_bg"
+    android:paddingBottom="@dimen/sleep_layout_margin_bottom">
+
+    <RelativeLayout
+        android:id="@+id/rl_heartbeat_amount"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/heartbeat_layout_marginTop"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tv_heartbeat"
+            style="@style/style_sport_text_b"
+            android:text="@string/heartbeat_default_value"
+            android:textSize="46sp" />
+
+        <TextView
+            android:id="@+id/tv_times"
+            style="@style/style_heartbeat_text"
+            android:layout_alignBottom="@id/tv_heartbeat"
+            android:layout_toRightOf="@id/tv_heartbeat"
+            android:text="@string/heartbeat_unit" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_times"
+            android:layout_toRightOf="@id/tv_heartbeat"
+            android:background="@drawable/heart" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_heartbeat_amount"
+        android:layout_width="fill_parent"
+        android:layout_height="15dp"
+        android:layout_alignTop="@id/rl_heartbeat_amount"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="65dip"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@color/heartbeat_1" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@color/heartbeat_2" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@color/heartbeat_3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:layout_alignTop="@id/ll_heartbeat_amount"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="20dip"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <TextView
+            style="@style/style_heartbeat_text"
+            android:layout_weight="1"
+            android:text="@string/heartbeat60" />
+
+        <TextView
+            style="@style/style_heartbeat_text"
+            android:layout_weight="1"
+            android:text="@string/heartbeat6090" />
+
+        <TextView
+            style="@style/style_heartbeat_text"
+            android:layout_weight="1"
+            android:text="@string/heartbeat90" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_heartbeat_amount"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="120dp"
+        android:lineSpacingMultiplier="1.2"
+        android:text="@string/heartbeat_prompt"
+        android:textColor="#525b62"
+        android:gravity="center"
+        android:textSize="18dp" />
+
+</RelativeLayout>

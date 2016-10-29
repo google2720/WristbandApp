@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loginLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/theme_bg"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:id="@+id/iv_profile_age_photo"
+        style="@style/style_sex_image"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/man" />
+
+    <TextView
+        android:id="@+id/tv_profile_age_age"
+        style="@style/style_sex_text"
+        android:layout_below="@id/iv_profile_age_photo"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/tv_profile_age_age_margin"
+        android:text="@string/profile_age" />
+
+    <TextView
+        android:id="@+id/tv_profile_age_age1"
+        style="@style/style_age_text"
+        android:layout_below="@id/tv_profile_age_age"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/tv_profile_age_age_margin" />
+
+    <LinearLayout
+        android:id="@+id/ll_profile_age"
+        android:layout_width="fill_parent"
+        android:layout_height="180dp"
+        android:layout_below="@id/tv_profile_age_age1"
+        android:layout_marginTop="@dimen/ll_profile_age_marginTop"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="@color/range_text1" />
+
+        <com.canice.wristbandapp.widget.WheelView
+            android:id="@+id/wv_profile_age"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/ll_height_bottom"
+        layout="@layout/layout_botton_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+    <Button
+        android:id="@+id/confirm"
+        style="@style/style_common_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/action_confirm"
+        android:visibility="gone" />
+</RelativeLayout>

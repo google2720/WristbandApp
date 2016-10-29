@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/theme_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/rl_weight"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_weight"
+            style="@style/style_height_text_1"
+            android:text="@string/profile_weight" />
+
+        <TextView
+            android:id="@+id/tv_weight_value"
+            style="@style/style_height_text_2"
+            android:text="50"/>
+
+        <TextView
+            style="@style/style_height_text_3"
+            android:text="@string/kilogram" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_sex"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:gravity="center" />
+
+        <com.canice.wristbandapp.widget.WeightScaleView
+            android:id="@+id/scale_weight"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="4" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_line_weight"
+        style="@style/style_personal_line"
+        android:layout_above="@id/ll_height_bottom" />
+
+    <include
+        android:id="@+id/ll_height_bottom"
+        layout="@layout/layout_botton_button" />
+
+    <Button
+        android:id="@+id/confirm"
+        style="@style/style_common_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/action_confirm"
+        android:visibility="gone" />
+</LinearLayout>

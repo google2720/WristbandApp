@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <color name="button_grey">#1b000000</color>
+    <color name="button_style">#1b000000</color>
+    <color name="green_theme">#3ed0ab</color>
+    <color name="theme_bg">#f0f5f9</color>
+    <color name="darker_gray_text">#9e9e9d</color>
+    <color name="black_text">#585858</color>
+    <color name="eidt_hint">#d9dcde</color>
+    <color name="loginEdit">#d9dcde</color>
+    <color name="text_color">#4e5359</color>
+     
+    <color name="white">#FFFFFF</color>
+    <color name="radius_line_bg">#e2e0de</color>
+    <color name="common_white">@android:color/white</color>
+    
+    <color name="ceeeeee">#eeeeee</color>
+    <color name="cff9c00">#ff9c00</color>
+    <color name="black">#000000</color>
+    
+     <!-- 底部导航条文字颜色 -->
+    <color name="bottom_bar_text_color_off">#808080</color>
+    <color name="light_red">#ff6600</color>
+    
+    <color name="range_text1">#7b7c7d</color>
+    
+    
+    <color name="heartbeat_1">#56a0ff</color>
+    <color name="heartbeat_2">#3ed0ab</color>
+    <color name="heartbeat_3">#ffbd31</color>
+    <color name="heartbeat_graphicalview_bg">#363f48</color>
+    <color name="heartbeat_graphicalview_grid">#7c858e</color>
+    
+    <color name="profile_height_btn_bg2">#3ed0ab</color>
+    
+    <color name="datacenter_soprt_item_text">#4f5055</color>
+    
+</resources>

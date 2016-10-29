@@ -1,0 +1,97 @@
+<resources>
+    <!-- begin 按钮字体 -->
+    <dimen name="new_button_long_text">20dp</dimen> <!-- 长条的按钮 -->
+
+    <!-- begin 登录注册字体 -->
+    <dimen name="new_login_user_name">16dp</dimen> <!-- 登录界面的已经登录过的用户的昵称 -->
+    <dimen name="new_login_text_button">15dp</dimen>
+     <dimen name="new_login_by_other">16dp</dimen> <!-- 其他登录方式 -->
+    <!-- end 登录注册字体 -->
+
+    <!-- 参照字体规范的标准字体 -->
+    <dimen name="dimens_button">20sp</dimen> <!-- 按钮文字 -->
+    <dimen name="dimens_hint">16sp</dimen> <!-- 文本提示内容 -->
+    <dimen name="text_large">22sp</dimen>
+    <dimen name="text_large_less">20sp</dimen>
+    <dimen name="text_middle">18sp</dimen>
+    <dimen name="text_small">16sp</dimen>
+    <dimen name="text_small_less">14sp</dimen>
+    <dimen name="text_small_less_than">13sp</dimen>
+    <dimen name="register_tv_text_size">18sp</dimen>
+    <dimen name="register_tv_width">60dp</dimen>
+    <dimen name="dialChart_paintTB">25sp</dimen>
+    <dimen name="dialChart_paintBT">30sp</dimen>
+    <dimen name="style_advice_text_4_size">15sp</dimen>
+    <dimen name="style_advice_text1_size">21sp</dimen>
+    <dimen name="style_advice_text2_size">18sp</dimen>
+    <dimen name="style_advice_rl_height">45dp</dimen>
+    <dimen name="style_advice_rl_marginTop">8dp</dimen>
+    <dimen name="style_common_btn_padding">8dp</dimen>
+    <dimen name="advice_OceanRippleLayout_marginTop">12dp</dimen>
+    
+    <dimen name="DialChart03View_wh">220dp</dimen>
+    
+    <dimen name="dimens_rl_layout_margin">15dp</dimen> <!-- 绝对布局的外边距 -->
+
+    <dimen name="dimens_rl_height">46dp</dimen> <!-- 绝对布局的外边距 -->
+
+    <dimen name="button_height">45dp</dimen>
+    <dimen name="avatar_content_large">130dp</dimen>
+    <dimen name="style_sex_image_marginTop">50dp</dimen>
+    <dimen name="tv_profile_age_age_margin">10dp</dimen>
+    <dimen name="style_sex_text">20sp</dimen>
+    <dimen name="style_age_text">28sp</dimen>
+    <dimen name="ll_profile_age_marginTop">30dp</dimen>
+    
+    <!-- 主activity底部tab的高度 -->
+    <dimen name="main_footer_height">60dp</dimen>
+    
+    <!-- 主activity底部tab的高度 -->
+    <dimen name="main_footer_tab_height">52dp</dimen>
+    <dimen name="new_bottom_menu">12dp</dimen>
+    
+    <dimen name="personal_line_height">45dp</dimen>
+    <dimen name="style_personal_text_marginLeft">10dp</dimen>
+    <dimen name="style_personal_text_marginRight">10dp</dimen>
+    
+    <!-- add by kaze for 20150719-->
+    <dimen name="register_firstlayout_padding_bottom">15dp</dimen>
+    <dimen name="register_tv_userName_paddingTop">8dp</dimen>
+    <dimen name="register_secondLayout_marginLeft">13dp</dimen>
+    <dimen name="register_secondLayout_marginRight">13dp</dimen>
+    <dimen name="register_secondLayout_marginTop">20dp</dimen>
+    <dimen name="register_layout_height">46dp</dimen>
+    <dimen name="register_layout_padding">5dp</dimen>
+    <dimen name="register_view_marginLeft">10dp</dimen>
+    <dimen name="register_view_marginRight">10dp</dimen>
+    <dimen name="register_vierifition_width">130dp</dimen>
+    <dimen name="register_vierifition_marginLeft">10dp</dimen>
+    <dimen name="register_vierifition_button_width">85dp</dimen>
+    <dimen name="register_register_button_margin">15dp</dimen>
+    <dimen name="register_register_button_padding">8dp</dimen>
+    <dimen name="register_thirdLayout_marginLR">15dp</dimen>
+    <dimen name="register_thirdLayout_padding_bottom">10dp</dimen>
+    
+    <dimen name="ll_profile_age_height">150dp</dimen>
+    
+    <dimen name="circle_advice_margin">8dp</dimen>
+    
+    <dimen name="share_layout_marginBottom">20dp</dimen>
+    
+    <dimen name="sport_laout_margin_bottom">15dp</dimen>
+    <dimen name="sport_arcprogress_wh">240dp</dimen>
+    <dimen name="sport_layout_margintop">80dp</dimen>
+    <dimen name="sport_tv_textSize">13dp</dimen>
+    <dimen name="share_layout_paddingTop">10dp</dimen>
+    <dimen name="share_layout_paddingBT">10dp</dimen>
+    <dimen name="share_layout_padding">10dp</dimen>
+    <dimen name="share_layout_marginLR">10dp</dimen>
+    <dimen name="share_layout_marginTB">10dp</dimen>
+    <dimen name="share_layout_height">230dp</dimen>
+    <dimen name="share_text_size">40sp</dimen>
+    <dimen name="social_edit_width">160dp</dimen>
+    <dimen name="sleep_layout_margin_top">40dp</dimen>
+    <dimen name="sleep_arcprogress_wh">240dp</dimen>
+    <dimen name="sleep_layout_margin_bottom">15dp</dimen>
+    <dimen name="heartbeat_layout_marginTop">80dp</dimen>
+</resources>

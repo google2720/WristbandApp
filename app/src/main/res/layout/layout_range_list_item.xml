@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="55dp"
+    android:background="#fff">
+
+    <TextView
+        android:id="@+id/tv_range_range"
+        style="@style/style_range_text1"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:background="@null"
+        android:gravity="center"
+        android:padding="5dp" />
+
+    <ImageView
+        android:id="@+id/iv_range_portrait"
+        style="@style/style_range_text1"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/tv_range_range"
+        android:src="@drawable/man_s"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_range_name"
+        style="@style/style_range_text2"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/iv_range_portrait"  />
+
+    <TextView
+        android:id="@+id/tv_range_step"
+        style="@style/style_range_text2"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="15dp"
+        android:text="@string/range_step" />
+
+    <TextView
+        android:id="@+id/tv_sumSteps"
+        style="@style/style_range_text2"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/tv_range_step"
+        android:layout_weight="1"
+        android:paddingRight="5dp"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/iv_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/me"
+        android:visibility="gone" />
+</RelativeLayout>

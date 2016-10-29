@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loginLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/theme_bg"
+    android:orientation="vertical"
+    android:paddingBottom="15dp" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/shape_corners_all"
+        android:orientation="horizontal"
+        android:weightSum="2" >
+
+        <Button
+            android:id="@+id/btn_datacenter_sport"
+            style="@style/style_datacenter_btn"
+            android:background="@drawable/shape_corners_l_green"
+            android:text="@string/datacenter_sport"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_datacenter_sleep"
+            style="@style/style_datacenter_btn"
+            android:background="@drawable/shape_corners_r_white"
+            android:text="@string/datacenter_sleep"
+            android:textColor="@color/green_theme" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_sport"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:divider="#dedfe1"
+        android:dividerHeight="1dp"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/lv_sleep"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:divider="#dedfe1"
+        android:dividerHeight="1dp"
+        android:visibility="gone" />
+
+</LinearLayout>

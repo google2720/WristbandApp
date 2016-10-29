@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">"EasyFit"</string>
+    <string name="action_complete">"完成"</string>
+    <string name="action_cancel">"取消"</string>
+    <string name="action_confirm">"确定"</string>
+    <string name="action_retry">"重试"</string>
+    <string name="action_step_down">"下一步"</string>
+    <string name="action_step_up">"上一步"</string>
+    <string name="action_setting">"设置"</string>
+    <string name="dialog_title_tip">"提示"</string>
+
+    <string name="quickly_register">快速注册</string>
+    <string name="internet_error">网络错误，请检查</string>
+    <string name="please_wait">请稍候</string>
+    <string name="login_title_login">登录</string>
+    <string name="login_tips_username">请输入正确的邮箱地址</string>
+    <string name="login_tips_pwd">请输入格式正确的密码</string>
+    <string name="login_tips_login_error">登录失败，请重试！</string>
+    <string name="login_tips_login_error1">登录失败，请重新输入！</string>
+    <string name="login_tips_logining">登录中，请稍候...</string>
+    <string name="login_tips_registering">注册中，请稍候...</string>
+    <string name="login_tips_register_error">注册失败，请重试！</string>
+    <string name="login_tips_register_success">注册成功</string>
+    <string name="forgot_password">找回密码</string>
+    <string name="edit_pwd">请输入密码</string>
+
+    <string name="register_title_register">注册</string>
+    <string name="register_hint_account">账户</string>
+    <string name="register_btn_get_verification_code">获取验证码</string>
+    <string name="register_hint_verification">验证码</string>
+    <string name="register_hint_pwd">密码</string>
+    <string name="register_edit_account">请输入邮箱</string>
+    <string name="register_verification_code">请输入验证码</string>
+
+    <string name="sport_title">"运动"</string>
+    <string name="sport_step">"当天步数\n(步)"</string>
+    <string name="sport_distance">"活动距离\n(km)"</string>
+    <string name="sport_energy">"消耗能量\n(kCal)"</string>
+    <string name="sport_fat">"脂肪燃烧\n(g)"</string>
+    <string name="sport_step2">"步数\n(步)"</string>
+    <string name="sleep_time_tip">"近24小时时长"</string>
+    <string name="sleep_title">"睡眠"</string>
+
+    <string name="range_title">"排名"</string>
+    <string name="range_myrange">"我的排名"</string>
+    <string name="range_currange">"当前排名"</string>
+    <string name="range_step">"步"</string>
+
+    <string name="logout_title">"退出"</string>
+    <string name="logout_message">"确认退出？退出后历史数据将被清除"</string>
+
+    <string name="open_phone_remind_tip">"您需要在系统设置中允许我们读取电话权限此功能才能正常使用"</string>
+    <string name="open_sms_remind_tip">"您需要在系统设置中允许我们读取短信权限此功能才能正常使用"</string>
+
+    <string name="heartbeat_title">心率</string>
+    <string name="heartbeat_start">开始</string>
+    <string name="heartbeat_unit">"次/分钟"</string>
+    <string name="heartbeat_prompt">"运动心跳加快属正常现象，请不要担心 。心跳信息仅供参考。"</string>
+    <string name="heartbeat_testing">"测定心率中..."</string>
+
+    <!-- 运动界面 -->
+    <string name="sport_goal">"目标 <xillf>%s</xillf>"</string>
+    <string name="sport_goal_completion_rate">"完成 <xillf>%s</xillf>%%"</string>
+    <string name="sport_error_device_connecting">"设备自动连接中，请稍后"</string>
+    <string name="sport_error_device_no_bind">"您尚未绑定设备"</string>
+
+    <string name="personal_title">个人</string> 
+    <string name="personal_info">我的资料</string>
+    <string name="personal_practise">运动目标</string>
+    <string name="personal_remind">久坐提醒</string>
+    <string name="personal_clock">智能闹钟</string>
+    <string name="personal_device">设备管理</string>
+    <string name="personal_about">关于我们</string>
+    <string name="personal_datacenter">数据中心</string>
+    <string name="personal_call_remind">来电提醒</string>
+    <string name="personal_anti_lost">防丢提醒</string>
+    <string name="personal_sos_setup">一键求救</string>
+    <string name="profile_title">我的资料</string>
+    <string name="profile_sex">"性别"</string>
+    <string name="profile_man">"男"</string>
+    <string name="profile_woman">"女"</string>
+    <string name="profile_age">"年龄"</string>
+    <string name="profile_passby">路过</string>
+    <string name="profile_goal">"运动目标"</string>
+    <string name="profile_goal_day">"每日运动目标"</string>
+    <string name="profile_goal_day1">"每天<xillf>%s</xillf>步"</string>
+    <string name="profile_goal_step">"步"</string>
+    <string name="profile_goal_tip">"根据您的个人情况设置合理目标"</string>
+    <string name="profile_nickname">"昵称"</string>
+    <string name="profile_nickname_hint">"设置昵称"</string>
+    <string name="profile_nickname_error_empty">"昵称不能为空"</string>
+    <string name="profile_nickname_error">"昵称不能小于4个字符或者大于16个字符"</string>
+    <string name="profile_height">"身高"</string>
+    <string name="profile_weight">"体重"</string>
+    <string name="profile_step">"步长"</string>
+    <string name="profile_setting">"设置"</string>
+    <string name="about_version">"当前版本:V<xillf>%s</xillf>"</string>
+
+    <!-- 单位 -->
+    <string name="cul_unit">"千卡"</string>
+
+    <string name="datacenter_title">数据中心</string>
+    <string name="datacenter_sport">运动历史记录</string>
+    <string name="datacenter_sleep">睡眠历史记录</string>
+
+    <string name="social_title">社交</string>
+    <string name="social_myshareno">我的分享码</string>
+    <string name="social_shareno">分享码</string>
+    <string name="social_share">分享</string>
+    <string name="social_addfriend">添加好友</string>
+    <string name="social_add">添加</string>
+    <string name="social_extractno">提取码:</string>
+    <string name="social_clickcopy">(点击复制分享码)</string>
+    <string name="social_copy_invite_code">"分享码已复制！"</string>
+    <string name="social_error_no_invite_code">"请输入邀请码！"</string>
+
+    <string name="device_title">"设备管理"</string>
+    <string name="device_remove">"解除设备"</string>
+    <string name="device_add">"添加设备"</string>
+    <string name="device_remove_tip">"是否解除设备？"</string>
+
+    <string name="find_pwd_title_txt">找回密码</string>
+    <string name="find_pwd_tips">发送中，请稍候...</string>
+    <string name="find_pwd_tips_error">发送失败，请重试！</string>
+
+    <string name="errcode_success">"发送成功"</string>
+    <string name="errcode_cancel">"发送取消"</string>
+    <string name="errcode_deny">"发送被拒绝"</string>
+    <string name="errcode_unknown">"发送返回"</string>
+    <string name="sos_sms_body">"[EasyFit提醒]我需要您的帮助，请尽快和TA联系！"</string>
+
+    <string name="sync_data">"同步数据中..."</string>
+    <string name="sync_data_successful">"同步成功"</string>
+    <string name="sync_data_failed">"同步失败"</string>
+    <string name="sync_data_timeout">"同步超时"</string>
+    <string name="device_num">"设备编号:<xillf>%s</xillf>"</string>
+    <string name="device_scan_failed">"扫描设备失败"</string>
+    <string name="device_connecting">"正在连接"</string>
+    <string name="device_connect_failed">"连接失败"</string>
+    <string name="device_binding">"正在绑定"</string>
+    <string name="device_bind_failed">"绑定设备失败"</string>
+    <string name="device_bind_success">"绑定设备成功"</string>
+    <string name="device_bind_delay">"绑定成功！请去运动界面点击同步获取设备数据。"</string>
+
+    <!-- 闹钟 -->
+    <string name="clock">"闹钟"</string>
+    <string name="clock_time">"时间"</string>
+    <string name="clock_notify_time_interval">"提醒间隔"</string>
+    <string name="clock_notify_time_interval_dialog_title">"选择提醒间隔，单位(分钟)"</string>
+
+    <string name="monday">"星期一"</string>
+    <string name="tuesday">"星期二"</string>
+    <string name="wednesday">"星期三"</string>
+    <string name="thursday">"星期四"</string>
+    <string name="friday">"星期五"</string>
+    <string name="saturday">"星期六"</string>
+    <string name="sunday">"星期日"</string>
+    <string name="day">"日"</string>
+    <string name="week">"周"</string>
+    <string name="month">"月"</string>
+    <string name="hour">"小时"</string>
+    <string name="minute">"分钟"</string>
+    <string name="female">"女"</string>
+    <string name="male">"男"</string>
+
+    <!-- 提醒 -->
+    <string name="remind">"提醒"</string>
+    <string name="remind_start_time">"开始时间"</string>
+    <string name="remind_end_time">"结束时间"</string>
+    <string name="remind_time_interval">"提醒间隔"</string>
+    <string name="remind_call">"电话提醒"</string>
+    <string name="remind_sms">"短信提醒"</string>
+    <string name="remind_wechat">"微信提醒"</string>
+    <string name="remind_qq">"QQ提醒"</string>
+    <string name="remind_notify_tip">"该功能需要通知访问的权限，请在系统设置打开EasyFit的权限"</string>
+
+    <!-- sos -->
+    <string name="sos_enable_tip">"是否开启求救"</string>
+    <string name="sos_phone_tip">"请输入电话号码："</string>
+    <string name="sos_notify_phone">"电话通知"</string>
+    <string name="sos_notify_sms">"短息通知"</string>
+    <string name="sos_error_no_phone">"请输入电话号码"</string>
+
+    <!-- 防丢失 -->
+    <string name="anti_distance_near">"近距离"</string>
+    <string name="anti_distance_medium">"中距离"</string>
+    <string name="anti_distance_long">"远距离"</string>
+
+    <!-- 忘记密码 -->
+    <string name="find_pw_input_email">"输入邮箱"</string>
+    <string name="find_pw_email_send_success">"邮件发送成功"</string>
+    <string name="find_pw_email_send_failed">"邮件发送失败，请重试!"</string>
+    <string name="find_pw_send_pw_to_email">"发送密码到邮箱"</string>
+    <string name="find_pw_resend">"重新发送密码到邮箱"</string>
+
+    <!-- 数据中心 -->
+    <string name="sleep_time">"睡眠时长"</string>
+    <string name="sleep_shallow">"浅睡"</string>
+    <string name="sleep_deep">"深睡"</string>
+
+    <!-- 分享 -->
+    <string name="share_tip">"快把你的光辉成绩晒一下吧"</string>
+    <string name="share_walk_distance">"步行了<xillf>%s</xillf>公里"</string>
+    <string name="share_cal">"≈<xillf>%s</xillf>个雪糕""</string>
+    <string name="share_cancel_download">"取消下载"</string>
+    <!-- 语言设置 -->
+    <string name="language_cn">"中文"</string>
+    <string name="language_en">"English"</string>
+    <string name="language_auto">"跟随系统"</string>
+    <string name="language_set">"多语言"</string>
+    <string name="language_save">"保存"</string>
+
+    <!-- 心率-->
+    <string name="bind_faild">"您尚未绑定设备"</string>
+</resources>

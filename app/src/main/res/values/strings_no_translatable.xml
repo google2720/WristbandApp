@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="heartbeat60" translatable="false">"&lt;60"</string>
+    <string name="heartbeat6090" translatable="false">"60—90"</string>
+    <string name="heartbeat90" translatable="false">"&gt;90"</string>
+    <string name="heartbeat_default_value" translatable="false">"0"</string>
+
+    <!-- 单位 -->
+    <string name="centimetre" translatable="false">"cm"</string>
+    <string name="kilometre" translatable="false">"km"</string>
+    <string name="kilogram" translatable="false">"kg"</string>
+    
+    <string name="default_time" translatable="false">"0"</string>
+</resources>

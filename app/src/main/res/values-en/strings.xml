@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">"EasyFit"</string>
+    <string name="action_complete">"Done"</string>
+    <string name="action_cancel">"Cancel"</string>
+    <string name="action_confirm">"OK"</string>
+    <string name="action_retry">"Retry"</string>
+    <string name="action_step_down">"Next"</string>
+    <string name="action_step_up">"Previous"</string>
+    <string name="action_setting">"Setting"</string>
+    <string name="dialog_title_tip">"Hint"</string>
+
+    <string name="quickly_register">"Register"</string>
+    <string name="internet_error">"Check your network please"</string>
+    <string name="please_wait">"waiting"</string>
+    <string name="login_title_login">"Login"</string>
+    <string name="login_tips_username">"Account incorrect"</string>
+    <string name="login_tips_pwd">"Password incorrect"</string>
+    <string name="login_tips_login_error">Login failed</string>
+    <string name="login_tips_login_error1">Login failed </string>
+    <string name="login_tips_logining">Logging...</string>
+    <string name="login_tips_registering">Registering...</string>
+    <string name="login_tips_register_error">Register failed</string>
+    <string name="login_tips_register_success">Register success</string>
+    <string name="forgot_password">Forget Password?</string>
+    <string name="edit_pwd">Password</string>
+
+    <string name="register_title_register">Register</string>
+    <string name="register_hint_account">Account</string>
+    <string name="register_btn_get_verification_code">get_verification_code</string>
+    <string name="register_hint_verification">verification</string>
+    <string name="register_hint_pwd">Password</string>
+    <string name="register_edit_account"> Email Address </string>
+    <string name="register_verification_code">verification_code</string>
+
+    <string name="sport_title">"Sports"</string>
+    <string name="sport_step">"Steps\n(step)"</string>
+    <string name="sport_distance">"Distance\n(km)"</string>
+    <string name="sport_energy">"Energy Used\n(kCal)"</string>
+    <string name="sport_fat">"Fat-Burning\n(g)"</string>
+    <string name="sport_step2">"Steps"</string>
+    <string name="sleep_time_tip">"Nearly 24 hours"</string>
+    <string name="sleep_title">"Sleep"</string>
+
+    <string name="range_title">"Ranking"</string>
+    <string name="range_myrange">"My Ranking"</string>
+    <string name="range_currange">"Current Ranking"</string>
+    <string name="range_step">"Steps"</string>
+
+    <string name="logout_title">"Exit"</string>
+    <string name="logout_message">"Are you sure to exit? Data will been REMOVED after exit."</string>
+
+    <string name="open_phone_remind_tip">"This function need \"read the phone right\" in the system settings"</string>
+    <string name="open_sms_remind_tip">"This function need \"read the SMS right\" in the system settings"</string>
+
+    <string name="heartbeat_title">"Heart Rate"</string>
+    <string name="heartbeat_start">"Start"</string>
+    <string name="heartbeat_unit">"Times/Min"</string>
+    <string name="heartbeat_prompt">"Your heart rate will increase after sports. Don't worry. This is for your reference only."</string>
+    <string name="heartbeat_testing">"Heart rate measuring..."</string>
+
+    <!-- 运动界面 -->
+    <string name="sport_goal">"Target: <xillf>%s</xillf>"</string>
+    <string name="sport_goal_completion_rate">"Achieve<xillf>%s</xillf>%%"</string>
+    <string name="sport_error_device_connecting">"Device is connecting automatically, waiting please"</string>
+    <string name="sport_error_device_no_bind">"You have not bound any device"</string>
+
+    <string name="personal_title">Me</string>
+    <string name="personal_info">Profile</string>
+    <string name="personal_practise">Sports Target</string>
+    <string name="personal_remind">Sedentary Reminder</string>
+    <string name="personal_clock">Alarm Clock</string>
+    <string name="personal_device">Device Management</string>
+    <string name="personal_about">About Us</string>
+    <string name="personal_datacenter">Data Center</string>
+    <string name="personal_call_remind">Reminder Center</string>
+    <string name="personal_anti_lost">Missing Reminder</string>
+    <string name="personal_sos_setup">SOS</string>
+    <string name="profile_title">Profile</string>
+    <string name="profile_sex">"Gender"</string>
+    <string name="profile_man">"Male"</string>
+    <string name="profile_woman">"Female"</string>
+    <string name="profile_age">"Age"</string>
+    <string name="profile_passby">passby</string>
+    <string name="profile_goal">"Sports Target"</string>
+    <string name="profile_goal_day">"Daily Sports Target"</string>
+    <string name="profile_goal_day1">"Everyday<xillf>%s</xillf>Steps"</string>
+    <string name="profile_goal_step">"Steps"</string>
+    <string name="profile_goal_tip">"Set reasonable target according to your personal circumstance"</string>
+    <string name="profile_nickname">"Nickname"</string>
+    <string name="profile_nickname_hint">"Hint"</string>
+    <string name="profile_nickname_error_empty">"Nickname Missed"</string>
+    <string name="profile_nickname_error">"Nickname must be within 4-16 characters"</string>
+    <string name="profile_height">"Height"</string>
+    <string name="profile_weight">"Weight"</string>
+    <string name="profile_step">"Step Length"</string>
+    <string name="profile_setting">"Reset"</string>
+    <string name="about_version">"Version:V<xillf>%s</xillf>"</string>
+
+    <!-- 单位 -->
+    <string name="cul_unit">"Kcal"</string>
+
+    <string name="datacenter_title">Data Center</string>
+    <string name="datacenter_sport">Sports History</string>
+    <string name="datacenter_sleep">Sleep History</string>
+
+    <string name="social_title">"Social"</string>
+    <string name="social_myshareno">"My Sharing Code"</string>
+    <string name="social_shareno">"Sharing Code"</string>
+    <string name="social_share">"Share"</string>
+    <string name="social_addfriend">"Add Sharing Code"</string>
+    <string name="social_add">"Add"</string>
+    <string name="social_extractno">"Sharing Code:"</string>
+    <string name="social_clickcopy">"(Click to copy the sharing code)"</string>
+    <string name="social_copy_invite_code">"Sharing code copied"</string>
+    <string name="social_error_no_invite_code">"Sharing Code"</string>
+
+    <string name="device_title">"Device Management"</string>
+    <string name="device_remove">"Remove Device"</string>
+    <string name="device_add">"Add Device"</string>
+    <string name="device_remove_tip">"Are you sure to remove device?"</string>
+
+    <string name="find_pwd_title_txt">"Forget Password?"</string>
+    <string name="find_pwd_tips">"Password sending, waiting please.."</string>
+    <string name="find_pwd_tips_error">"Send failed"</string>
+
+    <string name="errcode_success">"Send success"</string>
+    <string name="errcode_cancel">"Send failed"</string>
+    <string name="errcode_deny">"Send failed"</string>
+    <string name="errcode_unknown">"Send failed"</string>
+    <string name="sos_sms_body">"[EasyFit]I need your HELP，contact with me ASAQ！"</string>
+
+    <string name="sync_data">"Data Synchronizing..."</string>
+    <string name="sync_data_successful">"Synchronize success"</string>
+    <string name="sync_data_failed">"Synchronize failed"</string>
+    <string name="sync_data_timeout">"Synchronize timeout"</string>
+    <string name="device_num">"Device ID:<xillf>%s</xillf>"</string>
+    <string name="device_scan_failed">"Device scanning failed"</string>
+    <string name="device_connecting">"Connecting"</string>
+    <string name="device_connect_failed">"Connecting failed"</string>
+    <string name="device_binding">"Binding"</string>
+    <string name="device_bind_failed">"Bind failed"</string>
+    <string name="device_bind_success">"Bind success"</string>
+    <string name="device_bind_delay">"Binding success！pls goto the "Sport" menu get Device data."</string>
+
+    <!-- 闹钟 -->
+    <string name="clock">"Alarm"</string>
+    <string name="clock_time">"Time"</string>
+    <string name="clock_notify_time_interval">"Interval"</string>
+    <string name="clock_notify_time_interval_dialog_title">"Check Interval Please"</string>
+
+    <string name="monday">"Monday"</string>
+    <string name="tuesday">"Tuesday"</string>
+    <string name="wednesday">"Wednesday"</string>
+    <string name="thursday">"Thursday"</string>
+    <string name="friday">"Friday"</string>
+    <string name="saturday">"Saturday"</string>
+    <string name="sunday">"Sunday"</string>
+    <string name="day">"Day"</string>
+    <string name="week">"Week"</string>
+    <string name="month">"Month"</string>
+    <string name="hour">"H"</string>
+    <string name="minute">"Min"</string>
+    <string name="female">"Female"</string>
+    <string name="male">"Male"</string>
+
+    <!-- 提醒 -->
+    <string name="remind">"Reminder"</string>
+    <string name="remind_start_time">"Start Time"</string>
+    <string name="remind_end_time">"End Time"</string>
+    <string name="remind_time_interval">"Interval"</string>
+    <string name="remind_call">"Call"</string>
+    <string name="remind_sms">"SMS"</string>
+    <string name="remind_wechat">"WeChat"</string>
+    <string name="remind_qq">"QQ"</string>
+    <string name="remind_notify_tip">"This feature requires notification access permissions, open EasyFit set permissions in the system"</string>
+
+    <!-- sos -->
+    <string name="sos_enable_tip">"SOS On"</string>
+    <string name="sos_phone_tip">"Cell Phone Num:"</string>
+    <string name="sos_notify_phone">"Call"</string>
+    <string name="sos_notify_sms">"SMS"</string>
+    <string name="sos_error_no_phone">"Please enter the phone number"</string>
+
+    <!-- 防丢失 -->
+    <string name="anti_distance_near">"Near"</string>
+    <string name="anti_distance_medium">"Middle"</string>
+    <string name="anti_distance_long">"Far"</string>
+
+    <!-- 忘记密码 -->
+    <string name="find_pw_input_email">"Email Address"</string>
+    <string name="find_pw_email_send_success">"Email sending"</string>
+    <string name="find_pw_email_send_failed">"Email send failed"</string>
+    <string name="find_pw_send_pw_to_email">"Send The Password to My Mailbox"</string>
+    <string name="find_pw_resend">"Resend Email"</string>
+
+    <!-- 数据中心 -->
+    <string name="sleep_time">"Hours of Sleep"</string>
+    <string name="sleep_shallow">"Light Sleep"</string>
+    <string name="sleep_deep">"Deep Sleep"</string>
+
+    <!-- 分享 -->
+    <string name="share_tip">"Show your result!"</string>
+    <string name="share_walk_distance">"Distance <xillf>%s</xillf>Km"</string>
+    <string name="share_cal">"≈<xillf>%s</xillf> Ice-cream""</string>
+    <string name="share_cancel_download">"Cancel"</string>
+
+    <!-- 语言设置 -->
+    <string name="language_cn">"中文"</string>
+    <string name="language_en">"English"</string>
+    <string name="language_auto">"Auto"</string>
+    <string name="language_set">"Language"</string>
+    <string name="language_save">"Save"</string>
+
+    <!-- 心率-->
+    <string name="bind_faild">"You have not been bound to the device"</string>
+</resources>

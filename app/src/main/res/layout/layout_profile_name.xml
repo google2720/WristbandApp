@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/theme_bg"
+    android:paddingTop="50dp">
+
+    <Button
+        android:id="@+id/btn_name_ok"
+        style="@style/style_common_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_name_name"
+        android:layout_margin="10dp"
+        android:padding="2dp"
+        android:text="@string/action_confirm" />
+
+    <EditText
+        android:id="@+id/et_name_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btn_login"
+        android:layout_alignParentTop="true"
+        android:layout_margin="9dp"
+        android:layout_marginTop="67dp"
+        android:background="@color/white"
+        android:ems="10"
+        android:gravity="center_vertical"
+        android:hint="@string/profile_nickname_hint"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textSize="25sp">
+
+        <requestFocus />
+    </EditText>
+</RelativeLayout>
