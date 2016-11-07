@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.util.Log;
 
 import com.canice.wristbandapp.ble.BleController;
+import com.github.yzeaho.log.Lg;
 
 /**
  * android5.0以下版本的蓝牙扫描器
@@ -19,7 +20,7 @@ public class BleScannerKitkat implements BleScanner {
         public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
             String name = device.getName();
             String address = device.getAddress();
-            Log.i(TAG, "onLeScan " + name + " " + address + " " + rssi);
+            Lg.i(TAG, "onLeScan " + name + " " + address + " " + rssi);
             mBle.getCallbacks().onLeScan(device);
         }
     };

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "24.0.3"
     signingConfigs {
         config {
             keyAlias 'iap'
@@ -15,34 +15,41 @@ android {
         applicationId "com.canice.wristbandapp"
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        if (project.hasProperty('version_code')) {
+            versionCode Integer.parseInt(version_code)
+        } else {
+            versionCode 2
+        }
+        if (project.hasProperty('version_name')) {
+            versionName version_name
+        } else {
+            versionName "9.9.9"
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.config
+            buildConfigField "int", "LOG_LEVEL", "2"
         }
         release {
             signingConfig signingConfigs.config
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "int", "LOG_LEVEL", "6"
         }
     }
     productFlavors {
         oldFit {
             applicationId 'com.canice.wristbandapp1'
             buildConfigField "boolean", "newFit", "false"
-            versionName "1.1.5"
             manifestPlaceholders = [UMENG_APPKEY: '58143a215312dda299003521', TENCENT_APPID:'1105683981']
         }
         newFit {
             applicationId 'com.canice.wristbandapp'
             buildConfigField "boolean", "newFit", "true"
-            versionName "2.1.5"
             manifestPlaceholders = [UMENG_APPKEY: '5722f498e0f55adccf002f43', TENCENT_APPID:'1105459075']
         }
     }
-
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             output.outputFile = new File(
@@ -63,4 +70,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile project(path: ':log')
 }

@@ -54,6 +54,7 @@ import com.canice.wristbandapp.clock.ClockController;
 import com.canice.wristbandapp.core.net.AsyncHttpResponseHandler;
 import com.canice.wristbandapp.remind.RemindController;
 import com.canice.wristbandapp.util.Tools;
+import com.github.yzeaho.log.Lg;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -95,7 +96,7 @@ public class BleController {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final String action = intent.getAction();
-            Log.i(TAG, "onReceive " + action);
+            Lg.i(TAG, "onReceive " + action);
             EXECUTOR_SERVICE_POOL.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -129,12 +130,12 @@ public class BleController {
                 @Override
                 public void run() {
                     try {
-                        Log.i(TAG, "fetch history timeout");
+                        Lg.i(TAG, "fetch history timeout");
                         // 同步72小时数据成功之后关闭通知
                         setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
                         mCallbacks.onFetchHistoryFailed(BleError.TIME_OUT);
                     } catch (Exception e) {
-                        Log.w(TAG, "failed to close history timeout", e);
+                        Lg.w(TAG, "failed to close history timeout", e);
                     }
                 }
             });
@@ -184,7 +185,7 @@ public class BleController {
         } else if (BleConnection.ACTION_GATT_RSSI.equals(action)) {
             int rssi = intent.getIntExtra(BleConnection.EXTRA_DATA, 0);
             int newRssi = mRssiHelper.add(rssi);
-            Log.i(TAG, "onRemoteRssi newRssi:" + newRssi);
+            Lg.i(TAG, "onRemoteRssi newRssi:" + newRssi);
             if (newRssi != RssiHelper.NO_RSSI) {
                 mCallbacks.onRemoteRssi(mBleConnection.getDevice(), newRssi);
             }
@@ -192,7 +193,7 @@ public class BleController {
             mDefaultGattService = mBleConnection.getService(UUID_DATA_SERVICE);
             if (mDefaultGattService == null) {
                 // TODO 设备没有该服务？
-                Log.i(TAG, "It find no gatt service");
+                Lg.i(TAG, "It find no gatt service");
                 mDeviceReady = false;
                 mBleConnection.disconnect();
                 return;
@@ -200,7 +201,7 @@ public class BleController {
             mDataCharacteristic = mDefaultGattService.getCharacteristic(UUID_DATA_CHARACTERISTIC);
             if (mDataCharacteristic == null) {
                 // TODO 设备没有该特征？
-                Log.i(TAG, "It find no characteristic");
+                Lg.i(TAG, "It find no characteristic");
                 mDeviceReady = false;
                 mBleConnection.disconnect();
                 return;
@@ -208,7 +209,7 @@ public class BleController {
             if (BuildConfig.DEBUG) {
                 List<BluetoothGattDescriptor> descriptors = mDataCharacteristic.getDescriptors();
                 for (BluetoothGattDescriptor d : descriptors) {
-                    Log.i(TAG, "  d:" + d.getUuid() + " " + d.getPermissions());
+                    Lg.i(TAG, "  d:" + d.getUuid() + " " + d.getPermissions());
                 }
             }
             mDataDescriptor = mDataCharacteristic.getDescriptor(CLIENT_CHARACTERISTIC_CONFIG);
@@ -223,7 +224,7 @@ public class BleController {
                 } else {
                     Data d = NotifyDataHelper.parser(data);
                     if (d == null) {
-                        Log.i(TAG, "no support notify data?");
+                        Lg.i(TAG, "no support notify data?");
                     } else if (d instanceof HeartRateDataResult) {
                         mCallbacks.onGetHeartRateSuccess((HeartRateDataResult) d);
                     } else if (d instanceof HistoryResult) {
@@ -259,7 +260,7 @@ public class BleController {
     public void startLeScan() {
         if (!mScanning) {
             mScanning = true;
-            Log.i(TAG, "startLeScan");
+            Lg.i(TAG, "startLeScan");
             mScanner.startLeScan();
         }
     }
@@ -267,7 +268,7 @@ public class BleController {
     public void stopLeScan() {
         if (mScanning) {
             mScanning = false;
-            Log.i(TAG, "stopLeScan");
+            Lg.i(TAG, "stopLeScan");
             mScanner.stopLeScan();
         }
     }
@@ -339,7 +340,7 @@ public class BleController {
     }
 
     public void disconnect() {
-        Log.i(TAG, "disconnect");
+        Lg.i(TAG, "disconnect");
         disconnectInner();
         if (mBleConnection != null) {
             mBleConnection.disconnect();
@@ -386,7 +387,7 @@ public class BleController {
     @WorkerThread
     public void bindDeviceNew() {
         checkConnectionState();
-        Log.i(TAG, "bindDeviceNew start");
+        Lg.i(TAG, "bindDeviceNew start");
         BluetoothDevice device = mBleConnection.getDevice();
         String address = device.getAddress();
         BindQuery query = new BindQuery();
@@ -394,13 +395,13 @@ public class BleController {
         saveBindedDevice("", address);
         saveFailedBindedDevice(address, false);
         mCallbacks.onBindDeviceSuccess(device, !(address.equals(getBindedDeviceAddress())));
-        Log.i(TAG, "bindDeviceNew end");
+        Lg.i(TAG, "bindDeviceNew end");
     }
 
     @WorkerThread
     public void bindDeviceOld() {
         checkConnectionState();
-        Log.i(TAG, "bindDeviceOld start");
+        Lg.i(TAG, "bindDeviceOld start");
         BluetoothDevice device = mBleConnection.getDevice();
         if (device != null) {
             String address = device.getAddress();
@@ -415,7 +416,7 @@ public class BleController {
         } else {
             mCallbacks.onBindDeviceFailed(null);
         }
-        Log.i(TAG, "bindDeviceOld end");
+        Lg.i(TAG, "bindDeviceOld end");
     }
 
     private void saveBindedDeviceTime(long timeMillis) {
@@ -433,24 +434,24 @@ public class BleController {
     @WorkerThread
     public void bindDevice() {
         checkConnectionState();
-        Log.i(TAG, "bindDevice start");
+        Lg.i(TAG, "bindDevice start");
         BluetoothDevice device = mBleConnection.getDevice();
         BindQuery query = new BindQuery();
         BindQueryResult result = BindQueryResult.parser(write(query.toValue()));
         if (result != null) {
             boolean firstBinded = true;
             String deviceId = result.getDeviceId();
-            Log.i(TAG, "fetch deviceId:" + deviceId);
+            Lg.i(TAG, "fetch deviceId:" + deviceId);
             boolean binded = result.isBinded();
             if (binded) {
                 firstBinded = !(device.getAddress().equals(getBindedDeviceAddress()));
-                Log.i(TAG, device + " is alread bind, firstBinded:" + firstBinded);
+                Lg.i(TAG, device + " is alread bind, firstBinded:" + firstBinded);
             } else {
                 deviceId = getUnusedDeviceId();
                 if (deviceId == null) {
                     deviceId = HttpController.getInstance().createDeviceId();
                     if (deviceId == null) {
-                        Log.w(TAG, "failed to create device id from server");
+                        Lg.w(TAG, "failed to create device id from server");
                         mCallbacks.onBindDeviceFailed(device);
                         return;
                     }
@@ -493,7 +494,7 @@ public class BleController {
                         bindDeviceOld();
                     }
                 } catch (Exception e) {
-                    Log.w(TAG, "failed to bind device", e);
+                    Lg.w(TAG, "failed to bind device", e);
                     mCallbacks.onBindDeviceFailed(null);
                 }
             }
@@ -504,12 +505,12 @@ public class BleController {
     private PedometerDataResult fetchPedometerData() {
         checkConnectionState();
         String address = getBindedDeviceAddress();
-        Log.i(TAG, address + " fetch pedometer data start");
+        Lg.i(TAG, address + " fetch pedometer data start");
         PedometerData data = new PedometerData();
         PedometerDataResult r = PedometerDataResult.parser(write(data.toValue()));
-        Log.i(TAG, address + " fetch pedometer data finish");
+        Lg.i(TAG, address + " fetch pedometer data finish");
         if (r != null) {
-            Log.i(TAG, "fetch pedometer data " + r);
+            Lg.i(TAG, "fetch pedometer data " + r);
             BleDao.saveCurrentData(mContext, address, r);
         }
         return r;
@@ -522,7 +523,7 @@ public class BleController {
                 try {
                     mCallbacks.onFetchPedometerDataSuccess(fetchPedometerData());
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+                    Lg.w(TAG, e.toString());
                     mCallbacks.onFetchPedometerDataFailed(null);
                 }
             }
@@ -534,8 +535,8 @@ public class BleController {
         checkConnectionState();
         String address = getBindedDeviceAddress();
         long currentTime = (System.currentTimeMillis() - Tools.get2000Time()) / 1000;
-        Log.i(TAG, address + " sync system date");
-        Log.d(TAG, "currentTime:" + currentTime + " 0x" + Long.toHexString(currentTime));
+        Lg.i(TAG, address + " sync system date");
+        Lg.d(TAG, "currentTime:" + currentTime + " 0x" + Long.toHexString(currentTime));
         SystemDate data = new SystemDate();
         Calendar calendar = Calendar.getInstance();
         data.year = calendar.get(Calendar.YEAR) - 2000;
@@ -580,14 +581,14 @@ public class BleController {
     private void fetchVersionInfo() {
         checkConnectionState();
         String address = getBindedDeviceAddress();
-        Log.i(TAG, address + " fetch version info start");
+        Lg.i(TAG, address + " fetch version info start");
         VersionInfo data = new VersionInfo();
         VersionInfoResult result = VersionInfoResult.parser(write(data.toValue()));
         if (result == null) {
             mCallbacks.onFetchVersionInfoFailed();
         } else {
             BleDao.saveVersionInfo(mContext, address, result);
-            Log.i(TAG, "success to save version info to db");
+            Lg.i(TAG, "success to save version info to db");
             mCallbacks.onFetchVersionInfoSuccess(result);
         }
     }
@@ -610,7 +611,7 @@ public class BleController {
 
     private void antiAlarm() throws InterruptedException {
         checkConnectionState();
-        Log.i(TAG, "anti alarm start");
+        Lg.i(TAG, "anti alarm start");
 //        closeAntiLose();
 //         antiLose(false);
         AntiAlarm data = new AntiAlarm();
@@ -621,7 +622,7 @@ public class BleController {
         checkConnectionState();
         String address = getBindedDeviceAddress();
         mRssiHelper.clear();
-        Log.i(TAG, address + (enable ? " open" : " close") + " anti-lost start");
+        Lg.i(TAG, address + (enable ? " open" : " close") + " anti-lost start");
         AntiLost data = new AntiLost();
         write2(data.toValue(enable));
         if (enable) {
@@ -641,7 +642,7 @@ public class BleController {
      */
     public void antiLoseAsync() {
         if (mAntiLostTask != null) {
-            Log.i(TAG, "anti-lose is already running.");
+            Lg.i(TAG, "anti-lose is already running.");
             return;
         }
         mAntiLostTask = new AsyncTask<Void, Void, Void>() {
@@ -662,7 +663,7 @@ public class BleController {
      * 关闭防丢失
      */
     public void closeAntiLose() {
-        Log.i(TAG, "closeAntiLose " + mAntiLostTask);
+        Lg.i(TAG, "closeAntiLose " + mAntiLostTask);
         if (mAntiLostTask != null) {
             mAntiLostTask.cancel(true);
             mAntiLostTask = null;
@@ -699,7 +700,7 @@ public class BleController {
                         fetchHistory();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+                    Lg.w(TAG, e.toString());
                     mCallbacks.onFetchHistoryFailed(BleError.SYSTEM);
                 }
             }
@@ -711,35 +712,35 @@ public class BleController {
         mCallbacks.onFetchHistoryStart();
         checkConnectionState();
         String address = getBindedDeviceAddress();
-        Log.i(TAG, address + " fetch history start");
+        Lg.i(TAG, address + " fetch history start");
         long time = BleDao.getMaxHistotyTime(mContext, address);
-        Log.i(TAG, "history max time1:" + time);
+        Lg.i(TAG, "history max time1:" + time);
         long phoneTime = Tools.changeDeviceTime2Phone(time);
-        Log.i(TAG, "history max time2:" + phoneTime + " " + new Date(phoneTime).toString());
+        Lg.i(TAG, "history max time2:" + phoneTime + " " + new Date(phoneTime).toString());
         phoneTime = Math.max(phoneTime, getBindedDeviceTime());
-        Log.i(TAG, "history max time3:" + phoneTime + " " + new Date(phoneTime).toString());
-        Log.i(TAG, "history max time4: currentTime " + new Date().toString());
+        Lg.i(TAG, "history max time3:" + phoneTime + " " + new Date(phoneTime).toString());
+        Lg.i(TAG, "history max time4: currentTime " + new Date().toString());
         int h;
         if (phoneTime > System.currentTimeMillis()) {
             h = 71;
         } else {
             h = Tools.getDistanceTime(phoneTime);
         }
-        Log.i(TAG, "request history h:" + h);
+        Lg.i(TAG, "request history h:" + h);
         if (h <= 0) {
-            Log.i(TAG, "Do not need access to historical records.");
+            Lg.i(TAG, "Do not need access to historical records.");
             mCallbacks.onFetchHistorySuccess();
             return;
         }
         h = Math.min(71, h);
         for (int i = 1; i <= h; i++) {
-            Log.i(TAG, address + " fetch history " + i);
+            Lg.i(TAG, address + " fetch history " + i);
             History data = new History(i);
             HistoryResult result = HistoryResult.parser(write(data.toValue()));
             if (result != null) {
                 mCallbacks.onFetchHistory(address, result);
             } else {
-                Log.i(TAG, "failed to fetch history(" + i + ")");
+                Lg.i(TAG, "failed to fetch history(" + i + ")");
             }
         }
         mCallbacks.onFetchHistorySuccess();
@@ -750,11 +751,11 @@ public class BleController {
         checkThread();
         checkConnectionState();
         String address = getBindedDeviceAddress();
-        Log.i(TAG, "fetchHistoryByNotify start");
+        Lg.i(TAG, "fetchHistoryByNotify start");
 //        long time = BleDao.getMaxHistotyTime(mContext, address);
 //        int h = Tools.getDistanceTime(time);
 //        if (h <= 0) {
-//            Log.i(TAG, "it do not fetch history.");
+//            Lg.i(TAG, "it do not fetch history.");
 //            mCallbacks.onFetchHistorySuccess();
 //            return;
 //        }
@@ -762,7 +763,7 @@ public class BleController {
 //            h = 0xFF;
 //        }
         int h = 0xFF;
-        Log.i(TAG, "fetch history " + h);
+        Lg.i(TAG, "fetch history " + h);
         History2 data = new History2(h);
         setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, true);
         write2(data.toValue());
@@ -770,7 +771,7 @@ public class BleController {
 
     private void openHeartRate() {
         checkConnectionState();
-        Log.i(TAG, " open heart rate start");
+        Lg.i(TAG, " open heart rate start");
         setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, true);
         OpenHeartRateData data = new OpenHeartRateData();
         write2(data.toValue());
@@ -795,7 +796,7 @@ public class BleController {
 
     private void closeHeartRate() {
         checkConnectionState();
-        Log.i(TAG, "close heart rate start");
+        Lg.i(TAG, "close heart rate start");
         CloseHeartRateData data = new CloseHeartRateData();
         write(data.toValue());
         setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
@@ -818,7 +819,7 @@ public class BleController {
                 try {
                     closeHeartRate();
                 } catch (Exception e) {
-                    Log.w(TAG, "failed to close heart rate", e);
+                    Lg.w(TAG, "failed to close heart rate", e);
                 }
             }
         });
@@ -828,13 +829,13 @@ public class BleController {
         HttpController.getInstance().bindDeviceAsync(userId, address, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String content) {
-                Log.i(TAG, "bind device success " + content);
+                Lg.i(TAG, "bind device success " + content);
                 saveFailedBindedDevice(address, false);
             }
 
             @Override
             public void onFailure(Throwable error, String content) {
-                Log.i(TAG, "bind device failed " + content);
+                Lg.i(TAG, "bind device failed " + content);
                 saveFailedBindedDevice(address, true);
             }
         });
@@ -868,7 +869,7 @@ public class BleController {
                 try {
                     sendCallRemind(phone);
                 } catch (Exception e) {
-                    Log.e(TAG, "failed to sendCallRemind", e);
+                    Lg.e(TAG, "failed to sendCallRemind", e);
                 }
             }
         });
@@ -886,7 +887,7 @@ public class BleController {
                 try {
                     sendMessageRemind(phone);
                 } catch (Exception e) {
-                    Log.e(TAG, "failed to sendMessageRemind", e);
+                    Lg.e(TAG, "failed to sendMessageRemind", e);
                 }
             }
         });
@@ -899,12 +900,12 @@ public class BleController {
                 try {
                     checkConnectionState();
                     String address = getBindedDeviceAddress();
-                    Log.i(TAG, address + " send WeChat remind start");
+                    Lg.i(TAG, address + " send WeChat remind start");
                     WeChatRemind data = new WeChatRemind();
                     write(data.toValue());
-                    Log.i(TAG, address + " send WeChat remind finish");
+                    Lg.i(TAG, address + " send WeChat remind finish");
                 } catch (Exception e) {
-                    Log.e(TAG, "failed to sendWeChatRemind", e);
+                    Lg.e(TAG, "failed to sendWeChatRemind", e);
                 }
             }
         });
@@ -917,12 +918,12 @@ public class BleController {
                 try {
                     checkConnectionState();
                     String address = getBindedDeviceAddress();
-                    Log.i(TAG, address + " send qq remind start");
+                    Lg.i(TAG, address + " send qq remind start");
                     QQRemind data = new QQRemind();
                     write(data.toValue());
-                    Log.i(TAG, address + " send qq remind finish");
+                    Lg.i(TAG, address + " send qq remind finish");
                 } catch (Exception e) {
-                    Log.e(TAG, "failed to send qq remind", e);
+                    Lg.e(TAG, "failed to send qq remind", e);
                 }
             }
         });
@@ -946,14 +947,14 @@ public class BleController {
         checkConnectionState();
         phone = filterPhone(phone);
         String address = getBindedDeviceAddress();
-        Log.i(TAG, address + " send call remind " + phone + " start");
+        Lg.i(TAG, address + " send call remind " + phone + " start");
         Remind data = new Remind();
         RemindResult result = RemindResult.parser(write(data.toValue(phone.getBytes())));
         boolean success = (result != null && result.isSuccess());
         if (success) {
-            Log.i(TAG, address + " send call remind " + phone + " success");
+            Lg.i(TAG, address + " send call remind " + phone + " success");
         } else {
-            Log.i(TAG, address + " send call remind " + phone + " fail");
+            Lg.i(TAG, address + " send call remind " + phone + " fail");
             write(data.toValue(phone.getBytes()));
         }
     }
@@ -962,14 +963,14 @@ public class BleController {
         checkConnectionState();
         phone = filterPhone(phone);
         String address = getBindedDeviceAddress();
-        Log.i(TAG, address + " send message remind " + phone + " start");
+        Lg.i(TAG, address + " send message remind " + phone + " start");
         MessageRemind data = new MessageRemind();
         RemindResult result = RemindResult.parser(write(data.toValue(phone.getBytes())));
         boolean success = (result != null && result.isSuccess());
         if (success) {
-            Log.i(TAG, address + " send message remind " + phone + " success");
+            Lg.i(TAG, address + " send message remind " + phone + " success");
         } else {
-            Log.i(TAG, address + " send message remind " + phone + " fail");
+            Lg.i(TAG, address + " send message remind " + phone + " fail");
             write(data.toValue(phone.getBytes()));
         }
     }
@@ -992,7 +993,7 @@ public class BleController {
                     syncBaseData(clear);
                     saveSyncBaseDataFailed(false);
                 } catch (Exception e) {
-                    Log.e(TAG, "failed to syncBaseDataAsync", e);
+                    Lg.e(TAG, "failed to syncBaseDataAsync", e);
                     saveSyncBaseDataFailed(true);
                 }
             }
@@ -1014,7 +1015,7 @@ public class BleController {
     private void syncBaseData(boolean clear) {
         checkConnectionState();
         String address = getBindedDeviceAddress();
-        Log.i(TAG, address + " sync base data start");
+        Lg.i(TAG, address + " sync base data start");
         BaseData data = new BaseData();
         Calendar calendar = Calendar.getInstance();
         data.year = calendar.get(Calendar.YEAR) - 2000;
@@ -1118,13 +1119,13 @@ public class BleController {
         checkThread();
         checkConnectionState();
         String address = getBindedDeviceAddress();
-        Log.i(TAG, address + " sos " + (enable ? "enable" : "disable") + " start");
+        Lg.i(TAG, address + " sos " + (enable ? "enable" : "disable") + " start");
         BluetoothGattCharacteristic helpCharacteristic = mDefaultGattService.getCharacteristic(UUID_SOS_CHARACTERISTIC);
         if (helpCharacteristic != null) {
             if (BuildConfig.DEBUG) {
                 List<BluetoothGattDescriptor> descriptors = helpCharacteristic.getDescriptors();
                 for (BluetoothGattDescriptor d : descriptors) {
-                    Log.i(TAG, "sos:" + d.getUuid() + " " + d.getPermissions());
+                    Lg.i(TAG, "sos:" + d.getUuid() + " " + d.getPermissions());
                 }
             }
             BluetoothGattDescriptor d = helpCharacteristic.getDescriptor(CLIENT_CHARACTERISTIC_CONFIG);
@@ -1151,7 +1152,7 @@ public class BleController {
                 try {
                     mCallbacks.onFetchPedometerDataSuccess(fetchPedometerData());
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+                    Lg.w(TAG, e.toString());
                     mCallbacks.onFetchPedometerDataFailed(null);
                     return;
                 }
@@ -1164,7 +1165,7 @@ public class BleController {
                         fetchHistory();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+                    Lg.w(TAG, e.toString());
                     mCallbacks.onFetchHistoryFailed(BleError.SYSTEM);
                 }
             }

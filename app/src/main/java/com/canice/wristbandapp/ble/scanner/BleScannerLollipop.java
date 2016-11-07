@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.canice.wristbandapp.ble.BleController;
+import com.github.yzeaho.log.Lg;
 
 /**
  * android5.0的蓝牙扫描器
@@ -24,7 +25,7 @@ public class BleScannerLollipop implements BleScanner {
 
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            Log.i(TAG, "onLeScan " + result.getDevice().getName() + " " + result.getDevice().getAddress() + " " + result.getRssi());
+            Lg.i(TAG, "onLeScan " + result.getDevice().getName() + " " + result.getDevice().getAddress() + " " + result.getRssi());
             mBle.getCallbacks().onLeScan(result.getDevice());
         }
 

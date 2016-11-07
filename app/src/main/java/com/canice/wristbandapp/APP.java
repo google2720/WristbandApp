@@ -2,15 +2,15 @@ package com.canice.wristbandapp;
 
 import android.app.Application;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.canice.wristbandapp.ble.BleController;
 import com.canice.wristbandapp.ble.BleService;
 import com.canice.wristbandapp.core.net.AsyncHttpClient;
 import com.canice.wristbandapp.widget.CustomProgressDialog;
+import com.github.yzeaho.log.AndroidLgImpl;
+import com.github.yzeaho.log.Lg;
 
 /**
  * 项目启动Appliaction
@@ -35,6 +35,8 @@ public class APP extends Application {
     public void onCreate() {
         mInstance = this;
         super.onCreate();
+        Lg.setLg(new AndroidLgImpl(this));
+        Lg.setLevel(BuildConfig.LOG_LEVEL);
         Log.i(TAG, this + " onCreate");
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         Log.i(TAG, this + " onCreate2");

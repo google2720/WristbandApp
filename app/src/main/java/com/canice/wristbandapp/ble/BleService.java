@@ -23,6 +23,7 @@ import com.canice.wristbandapp.UserController;
 import com.canice.wristbandapp.ble.data.HistoryResult;
 import com.canice.wristbandapp.ble.db.BleDao;
 import com.canice.wristbandapp.util.Tools;
+import com.github.yzeaho.log.Lg;
 
 public class BleService extends Service {
 
@@ -91,11 +92,11 @@ public class BleService extends Service {
 
         @Override
         public void onFetchHistory(String address, HistoryResult result) {
-            Log.i(TAG, "history:" + result);
+            Lg.i(TAG, "history:" + result);
             BleDao.saveHistory(getApplicationContext(), address, result);
-            Log.i(TAG, "success to save history info to db");
-            Log.i(TAG, "h time:" + result.getTime());
-            Log.i(TAG, "h time2:" + Tools.changeDeviceTime2PhoneTime(result.getTime()));
+            Lg.i(TAG, "success to save history info to db");
+            Lg.i(TAG, "h time:" + result.getTime());
+            Lg.i(TAG, "h time2:" + Tools.changeDeviceTime2PhoneTime(result.getTime()));
         }
 
         @Override
@@ -139,10 +140,10 @@ public class BleService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            Log.i(TAG, "onReceive " + action);
+            Lg.i(TAG, "onReceive " + action);
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF);
-                Log.i(TAG, "bluetooth state " + state);
+                Lg.i(TAG, "bluetooth state " + state);
                 if (state == BluetoothAdapter.STATE_OFF) {
                     mBle.disconnect();
                     mBle.getCallbacks().onBluetoothOff();
@@ -168,11 +169,11 @@ public class BleService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-            Log.d(TAG, "handleMessage " + msg.what);
+            Lg.d(TAG, "handleMessage " + msg.what);
             switch (msg.what) {
                 case MSG_INIT:
                     String address = mBle.getBindedDeviceAddress();
-                    Log.i(TAG, "bind device address " + address);
+                    Lg.i(TAG, "bind device address " + address);
                     if (!TextUtils.isEmpty(address)) {
                         sendEmptyMessage(MSG_SCAN);
                     }
@@ -213,7 +214,7 @@ public class BleService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "onCreate");
+        Lg.i(TAG, "onCreate");
         mHandler = new ServiceHandler(Looper.getMainLooper());
         mBle = BleController.getInstance();
         mBle.initialize(this);
@@ -232,7 +233,7 @@ public class BleService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "onStartCommand " + startId);
+        Lg.i(TAG, "onStartCommand " + startId);
         mHandler.sendEmptyMessage(MSG_INIT);
         return super.onStartCommand(intent, flags, startId);
     }
@@ -240,7 +241,7 @@ public class BleService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy");
+        Lg.i(TAG, "onDestroy");
         unregisterReceiver(receiver);
         mBle.removeCallback(mCallback);
     }
