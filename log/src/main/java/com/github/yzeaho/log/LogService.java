@@ -45,8 +45,7 @@ public class LogService extends IntentService {
     protected static void log(Context context, byte[] bs, Class<? extends LogService> cl) {
         if (bs == null) {
             return;
-        }
-        if (bs.length <= MAX_LENGTH) {
+        } else if (bs.length <= MAX_LENGTH) {
             Intent i = new Intent(context, cl);
             i.putExtra("extra_log", bs);
             context.startService(i);
