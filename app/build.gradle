@@ -19,6 +19,7 @@ android {
         versionCode project.hasProperty('version_code') ? Integer.parseInt(version_code) : 2
         versionName project.hasProperty('version_name') ? version_name : "9.9.9"
         buildConfigField "int", "LOG_LEVEL", project.hasProperty('log_level') ? log_level : "2"
+        buildConfigField "boolean", "HEART_RATE_NOTIFY", "false"
     }
     buildTypes {
         debug {

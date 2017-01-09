@@ -14,10 +14,10 @@ import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.support.annotation.WorkerThread;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.canice.wristbandapp.BuildConfig;
 import com.canice.wristbandapp.SleepTime;
@@ -118,7 +118,6 @@ public class BleController {
     private Runnable mCloseHeartRateRunnable = new Runnable() {
         @Override
         public void run() {
-            EXECUTOR_SERVICE_SINGLE.shutdownNow();
             closeHeartRateAsync();
         }
     };
@@ -141,6 +140,7 @@ public class BleController {
             });
         }
     };
+    private HeartRateTask heartRateTask;
 
     private BleController() {
         mCallbacks = new GroupBleCallback();
@@ -226,7 +226,7 @@ public class BleController {
                     if (d == null) {
                         Lg.i(TAG, "no support notify data?");
                     } else if (d instanceof HeartRateDataResult) {
-                        mCallbacks.onGetHeartRateSuccess((HeartRateDataResult) d);
+                        mCallbacks.onGetHeartRateSuccess(((HeartRateDataResult) d).getHeartRate());
                     } else if (d instanceof HistoryResult) {
                         HistoryResult r = (HistoryResult) d;
                         if (r.isFinish()) {
@@ -772,7 +772,9 @@ public class BleController {
     private void openHeartRate() {
         checkConnectionState();
         Lg.i(TAG, " open heart rate start");
-        setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, true);
+        if (BuildConfig.HEART_RATE_NOTIFY) {
+            setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, true);
+        }
         OpenHeartRateData data = new OpenHeartRateData();
         write2(data.toValue());
     }
@@ -781,25 +783,56 @@ public class BleController {
      * 打开心率测试
      */
     public void openHeartRateAsync() {
-        EXECUTOR_SERVICE_SINGLE.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    openHeartRate();
-                    closeHeartRateAsync(30 * 1000);
-                } catch (Exception e) {
-                    mCallbacks.onGetHeartRateFailed();
+        if (BuildConfig.HEART_RATE_NOTIFY) {
+            EXECUTOR_SERVICE_SINGLE.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        openHeartRate();
+                        closeHeartRateAsync(30 * 1000);
+                    } catch (Exception e) {
+                        mCallbacks.onGetHeartRateFailed();
+                    }
                 }
+            });
+        } else {
+            if (heartRateTask != null) {
+                heartRateTask.cancel(true);
             }
-        });
+            heartRateTask = new HeartRateTask();
+            heartRateTask.executeOnExecutor(EXECUTOR_SERVICE_POOL);
+        }
+    }
+
+    private class HeartRateTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                openHeartRate();
+                closeHeartRateAsync(30 * 1000);
+                while (!isCancelled()) {
+                    PedometerData data = new PedometerData();
+                    PedometerDataResult r = PedometerDataResult.parser(write(data.toValue()));
+                    if (r != null) {
+                        mCallbacks.onGetHeartRateSuccess(r.getHeartRate());
+                    }
+                    SystemClock.sleep(1000);
+                }
+            } catch (Exception e) {
+                mCallbacks.onGetHeartRateFailed();
+            }
+            return null;
+        }
     }
 
     private void closeHeartRate() {
         checkConnectionState();
         Lg.i(TAG, "close heart rate start");
-        CloseHeartRateData data = new CloseHeartRateData();
-        write(data.toValue());
-        setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
+        write(new CloseHeartRateData().toValue());
+        if (BuildConfig.HEART_RATE_NOTIFY) {
+            setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
+        }
         mCallbacks.onCloseHeartRate();
     }
 
@@ -817,6 +850,10 @@ public class BleController {
             @Override
             public void run() {
                 try {
+                    if (heartRateTask != null) {
+                        heartRateTask.cancel(true);
+                        heartRateTask = null;
+                    }
                     closeHeartRate();
                 } catch (Exception e) {
                     Lg.w(TAG, "failed to close heart rate", e);

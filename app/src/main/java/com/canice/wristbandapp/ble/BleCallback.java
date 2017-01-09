@@ -41,7 +41,7 @@ public interface BleCallback {
 
     void onFetchHistorySuccess();
 
-    void onGetHeartRateSuccess(HeartRateDataResult heartRateDataResult);
+    void onGetHeartRateSuccess(int value);
 
     void onGetHeartRateFailed();
 

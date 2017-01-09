@@ -76,7 +76,7 @@ public class SimpleBleCallback implements BleCallback {
     }
 
     @Override
-    public void onGetHeartRateSuccess(HeartRateDataResult heartRateDataResult) {
+    public void onGetHeartRateSuccess(int value) {
     }
 
     @Override

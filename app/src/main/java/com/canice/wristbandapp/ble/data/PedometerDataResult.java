@@ -28,8 +28,7 @@ public class PedometerDataResult extends Data {
     }
 
     public String getDate() {
-        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-        return dateFormater.format(new Date());
+        return new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).format(new Date());
     }
 
     public int getStep() {
@@ -52,9 +51,13 @@ public class PedometerDataResult extends Data {
         return data[9] & 0xff;
     }
 
+    public int getHeartRate() {
+        return data[10] & 0xff;
+    }
+
     @Override
     public String toString() {
-        return "PedometerDataResult [getStep()=" + getStep() + ", getDistance()=" + getDistance() + ", getCal()="
-                + getCal() + ", getGol()=" + getGol() + ", getBattery()=" + getBattery() + "]";
+        return "PedometerDataResult [getStep=" + getStep() + ", getDistance=" + getDistance() + ", getCal="
+                + getCal() + ", getGol=" + getGol() + ", getBattery=" + getBattery() + ",getHeartRate=" + getHeartRate() + "]";
     }
 }

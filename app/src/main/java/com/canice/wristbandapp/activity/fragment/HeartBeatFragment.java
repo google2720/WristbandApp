@@ -1,12 +1,12 @@
 package com.canice.wristbandapp.activity.fragment;
 
-import android.support.v7.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +18,7 @@ import com.canice.wristbandapp.activity.MainActivity;
 import com.canice.wristbandapp.ble.BleCallback;
 import com.canice.wristbandapp.ble.BleController;
 import com.canice.wristbandapp.ble.SimpleBleCallback;
-import com.canice.wristbandapp.ble.data.HeartRateDataResult;
 import com.canice.wristbandapp.util.HintUtils;
-import com.canice.wristbandapp.util.HttpUtil;
 
 public class HeartBeatFragment extends BaseFragment {
 
@@ -45,16 +43,16 @@ public class HeartBeatFragment extends BaseFragment {
         }
 
         @Override
-        public void onGetHeartRateSuccess(final HeartRateDataResult heartRateDataResult) {
+        public void onGetHeartRateSuccess(final int value) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    tv_heartbeat.setText(heartRateDataResult.getHeartRate() + "");
+                    Log.i("HeartBeatFragment", "onGetHeartRateSuccess " + value);
+                    tv_heartbeat.setText(String.valueOf(value));
                     if (fisrtSuccess) {
                         ble.closeHeartRateAsync(10 * 1000);
                         fisrtSuccess = false;
                     }
-                    Log.i("HeartBeatFragment", "onGetHeartRateSuccess ");
                 }
             });
         }
@@ -89,21 +87,18 @@ public class HeartBeatFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_heartbeat, container, false);
-
-        initViews(view);
-
-        return view;
+        View root = inflater.inflate(R.layout.layout_heartbeat, container, false);
+        tv_heartbeat = (TextView) root.findViewById(R.id.tv_heartbeat);
+        return root;
     }
 
     public void refreshData() {
-        fisrtSuccess=true;
-        if (BleController.getInstance().isDeviceReady()){
+        fisrtSuccess = true;
+        if (BleController.getInstance().isDeviceReady()) {
             BleController.getInstance().openHeartRateAsync();
             AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
             builder.setMessage(R.string.heartbeat_testing);
             builder.setOnCancelListener(new OnCancelListener() {
-
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     ble.closeHeartRateAsync(0);
@@ -111,28 +106,12 @@ public class HeartBeatFragment extends BaseFragment {
             });
             dialog = builder.create();
             dialog.show();
-        }else{
+        } else {
             HintUtils.showShortToast(getActivity(), getString(R.string.bind_faild));
         }
-
-    }
-
-    @SuppressWarnings("deprecation")
-    private void initViews(View view) {
-        tv_heartbeat = (TextView) view.findViewById(R.id.tv_heartbeat);
-        tv_heartbeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-
-            }
-        });
     }
 
     @Override
     public void handleMessage(Message msg) {
-        // TODO Auto-generated method stub
-
     }
-
 }

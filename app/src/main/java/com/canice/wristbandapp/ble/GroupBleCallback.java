@@ -130,9 +130,9 @@ public class GroupBleCallback implements BleCallback {
         }
     }
     @Override
-    public void onGetHeartRateSuccess(HeartRateDataResult heartRateDataResult) {
+    public void onGetHeartRateSuccess(int value) {
         for (BleCallback l : listeners) {
-            l.onGetHeartRateSuccess(heartRateDataResult);
+            l.onGetHeartRateSuccess(value);
         }
     }
 
