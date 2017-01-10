@@ -58,6 +58,7 @@
     <string name="heartbeat_unit">"次/分钟"</string>
     <string name="heartbeat_prompt">"运动心跳加快属正常现象，请不要担心 。心跳信息仅供参考。"</string>
     <string name="heartbeat_testing">"测定心率中..."</string>
+    <string name="heartbeat_stop">结束</string>
 
     <!-- 运动界面 -->
     <string name="sport_goal">"目标 <xillf>%s</xillf>"</string>
@@ -213,4 +214,5 @@
 
     <!-- 心率-->
     <string name="bind_faild">"您尚未绑定设备"</string>
+    <string name="single">"单次"</string>
 </resources>

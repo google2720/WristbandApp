@@ -135,7 +135,10 @@ public class HeadView extends LinearLayout {
     public void setRightBtnText(int resid) {
         mRightTitle.setText(resid);
     }
-    
+    public TextView getRightTitle(){
+        return mRightTitle;
+    }
+
     /**
      * 设置右边按钮文字
      */

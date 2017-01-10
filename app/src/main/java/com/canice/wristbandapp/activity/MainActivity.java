@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
 
 import com.canice.wristbandapp.BuildConfig;
 import com.canice.wristbandapp.R;
@@ -210,16 +211,18 @@ public class MainActivity extends BaseActivity implements TabListener {
             this.setLeftBtnVisibility(View.GONE);
             this.setTitle(R.string.heartbeat_title);
             this.setRightBtnVisibility(View.GONE);
-            this.setRightBtnText(R.string.heartbeat_start);
-            this.setRightBtnTextVisible(View.VISIBLE);
-            this.setRightBtnTextClick(new View.OnClickListener() {
+            TextView rightTextView = getRightTitle();
+            if (rightTextView.getText().equals(getString(R.string.heartbeat_start))
+                    || rightTextView.getText().equals(getString(R.string.heartbeat_stop))) {
 
-                @Override
-                public void onClick(View v) {
-                    HeartBeatFragment heart = (HeartBeatFragment) heartBeatTab.getCurrentFragment();
-                    heart.refreshData();
-                }
-            });
+            } else {
+                this.setRightBtnText(R.string.heartbeat_start);
+            }
+
+            this.setRightBtnTextVisible(View.VISIBLE);
+            HeartBeatFragment heart = (HeartBeatFragment) heartBeatTab.getCurrentFragment();
+            heart.setRightTitle(getRightTitle());
+
         } else if (tab == sportTab) {
             this.setLeftBtnVisibility(View.GONE);
             if (BuildConfig.newFit) {
@@ -239,6 +242,17 @@ public class MainActivity extends BaseActivity implements TabListener {
                 }
             });
         }
+        if (!(tab == heartBeatTab)) {
+            HeartBeatFragment heart = (HeartBeatFragment) heartBeatTab.getCurrentFragment();
+            if (heart != null) {
+                TextView rightTextView = getRightTitle();
+                rightTextView.setText(R.string.heartbeat_stop);
+                heart.stopAnim();
+                heart.closeHeart();
+            }
+        }
+
+
     }
 
     @Override

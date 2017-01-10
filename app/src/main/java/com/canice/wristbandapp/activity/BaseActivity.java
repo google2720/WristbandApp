@@ -290,7 +290,9 @@ public class BaseActivity extends AppCompatActivity {
     public void setRightBtnText(int resid) {
         mHeadView.setRightBtnText(resid);
     }
-
+    public TextView getRightTitle(){
+        return mHeadView.getRightTitle();
+    }
     public void setRightBtnText(String text) {
         mHeadView.setRightBtnText(text);
     }

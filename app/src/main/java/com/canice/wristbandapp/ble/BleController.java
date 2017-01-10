@@ -37,6 +37,7 @@ import com.canice.wristbandapp.ble.data.History2;
 import com.canice.wristbandapp.ble.data.HistoryResult;
 import com.canice.wristbandapp.ble.data.MessageRemind;
 import com.canice.wristbandapp.ble.data.OpenHeartRateData;
+import com.canice.wristbandapp.ble.data.OpenRateDataResult;
 import com.canice.wristbandapp.ble.data.PedometerData;
 import com.canice.wristbandapp.ble.data.PedometerDataResult;
 import com.canice.wristbandapp.ble.data.QQRemind;
@@ -769,20 +770,20 @@ public class BleController {
         write2(data.toValue());
     }
 
-    private void openHeartRate() {
+    private OpenRateDataResult openHeartRate() {
         checkConnectionState();
         Lg.i(TAG, " open heart rate start");
         if (BuildConfig.HEART_RATE_NOTIFY) {
             setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, true);
         }
         OpenHeartRateData data = new OpenHeartRateData();
-        write2(data.toValue());
+        return OpenRateDataResult.parser(write(data.toValue()));
     }
 
     /**
      * 打开心率测试
      */
-    public void openHeartRateAsync() {
+    public void openHeartRateAsync(boolean single) {
         if (BuildConfig.HEART_RATE_NOTIFY) {
             EXECUTOR_SERVICE_SINGLE.execute(new Runnable() {
                 @Override
@@ -799,25 +800,35 @@ public class BleController {
             if (heartRateTask != null) {
                 heartRateTask.cancel(true);
             }
-            heartRateTask = new HeartRateTask();
+            heartRateTask = new HeartRateTask(single);
             heartRateTask.executeOnExecutor(EXECUTOR_SERVICE_POOL);
         }
     }
 
     private class HeartRateTask extends AsyncTask<Void, Void, Void> {
+        boolean single;
+        public HeartRateTask(boolean single){
+            this.single=single;
+        }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                openHeartRate();
-                closeHeartRateAsync(30 * 1000);
+                OpenRateDataResult result= openHeartRate();
+                if (result==null){
+                    mCallbacks.onGetHeartRateFailed();
+                    return null;
+                }
+                if (single){
+                    closeHeartRateAsync(30 * 1000);
+                }
                 while (!isCancelled()) {
                     PedometerData data = new PedometerData();
                     PedometerDataResult r = PedometerDataResult.parser(write(data.toValue()));
                     if (r != null) {
                         mCallbacks.onGetHeartRateSuccess(r.getHeartRate());
                     }
-                    SystemClock.sleep(1000);
+                    SystemClock.sleep(2000);
                 }
             } catch (Exception e) {
                 mCallbacks.onGetHeartRateFailed();
@@ -1176,6 +1187,7 @@ public class BleController {
         mDeviceReady = false;
         stopLeScan();
         closeAntiLose();
+        closeHeartRate();
         int state = historyController.getState();
         if (state == HistoryController.STATE_START || state == HistoryController.STATE_FETCHING) {
             mCallbacks.onFetchHistoryFailed(BleError.SYSTEM);

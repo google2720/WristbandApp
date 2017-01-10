@@ -58,6 +58,7 @@
     <string name="heartbeat_unit">"Times/Min"</string>
     <string name="heartbeat_prompt">"Your heart rate will increase after sports. Don't worry. This is for your reference only."</string>
     <string name="heartbeat_testing">"Heart rate measuring..."</string>
+    <string name="heartbeat_stop">"Stop"</string>
 
     <!-- 运动界面 -->
     <string name="sport_goal">"Target: <xillf>%s</xillf>"</string>
@@ -214,4 +215,5 @@
 
     <!-- 心率-->
     <string name="bind_faild">"You have not been bound to the device"</string>
+    <string name="single">Single</string>
 </resources>

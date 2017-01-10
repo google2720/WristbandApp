@@ -6,11 +6,43 @@
     android:background="@color/theme_bg"
     android:paddingBottom="@dimen/sleep_layout_margin_bottom">
 
+    <ImageView
+        android:id="@+id/iv_anim"
+        android:layout_marginTop="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/heart"
+        android:layout_centerHorizontal="true"/>
+    <LinearLayout
+        android:id="@+id/ll_single"
+        android:layout_below="@+id/iv_anim"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/single"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Switch
+            android:layout_marginLeft="5dp"
+            android:id="@+id/single"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     <RelativeLayout
+        android:layout_below="@+id/ll_single"
         android:id="@+id/rl_heartbeat_amount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/heartbeat_layout_marginTop"
+        android:layout_marginTop="30dp"
         android:gravity="center_horizontal">
 
         <TextView
@@ -31,7 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/tv_times"
             android:layout_toRightOf="@id/tv_heartbeat"
-            android:background="@drawable/heart" />
+            android:background="@drawable/heart"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -65,6 +98,7 @@
     </LinearLayout>
 
     <LinearLayout
+
         android:layout_width="fill_parent"
         android:layout_height="25dp"
         android:layout_alignTop="@id/ll_heartbeat_amount"
@@ -91,6 +125,7 @@
     </LinearLayout>
 
     <TextView
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_heartbeat_amount"
