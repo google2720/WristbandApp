@@ -1,11 +1,15 @@
 package com.canice.wristbandapp.activity.fragment;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +29,11 @@ import com.canice.wristbandapp.SmsReceivedService;
 import com.canice.wristbandapp.UserController;
 import com.canice.wristbandapp.activity.MainActivity;
 import com.canice.wristbandapp.ble.BleCallback;
+import com.canice.wristbandapp.ble.BleConnection;
 import com.canice.wristbandapp.ble.BleController;
 import com.canice.wristbandapp.ble.SimpleBleCallback;
 import com.canice.wristbandapp.util.HintUtils;
+import com.github.yzeaho.log.Lg;
 
 public class HeartBeatFragment extends BaseFragment {
 
@@ -92,6 +98,16 @@ public class HeartBeatFragment extends BaseFragment {
         }
     };
 
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final String action = intent.getAction();
+            Lg.i(TAG, "onReceive " + action);
+            if (BleConnection.ACTION_GATT_DISCONNECTED.equals(action)) {
+              stopAnim();
+            }
+        }
+    };
     public void setRightTitle(TextView tv) {
         this.rightTitle = tv;
         rightTitle.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +139,10 @@ public class HeartBeatFragment extends BaseFragment {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivity(enableBtIntent);
         }
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BleConnection.ACTION_GATT_DISCONNECTED);
+        LocalBroadcastManager.getInstance(this.getContext()).registerReceiver(mReceiver, filter);
     }
 
     @Override
@@ -161,6 +181,9 @@ public class HeartBeatFragment extends BaseFragment {
 
         if (myAnimation_Scale != null) {
             myAnimation_Scale.cancel();
+        }
+        if (rightTitle!=null){
+            rightTitle.setText(getString(R.string.heartbeat_start));
         }
     }
 
