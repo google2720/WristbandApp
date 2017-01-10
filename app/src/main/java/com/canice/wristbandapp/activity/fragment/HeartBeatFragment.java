@@ -41,6 +41,7 @@ public class HeartBeatFragment extends BaseFragment {
     TextView rightTitle;
     ScaleAnimation myAnimation_Scale;
     ImageView iv_anim;
+    AnimationSet animationSet = new AnimationSet(true);
     private BleCallback cb = new SimpleBleCallback() {
 
         @Override
@@ -65,7 +66,7 @@ public class HeartBeatFragment extends BaseFragment {
                     Log.i("HeartBeatFragment", "onGetHeartRateSuccess " + value);
                     tv_heartbeat.setText(String.valueOf(value));
                     if (fisrtSuccess) {
-                        if (single.isChecked()){
+                        if (single.isChecked()) {
                             ble.closeHeartRateAsync(10 * 1000);
                             fisrtSuccess = false;
                         }
@@ -109,14 +110,7 @@ public class HeartBeatFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (!isVisibleToUser){
-            stopAnim();
-            closeHeart();
-        }
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,7 +129,7 @@ public class HeartBeatFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.layout_heartbeat, container, false);
         tv_heartbeat = (TextView) root.findViewById(R.id.tv_heartbeat);
-        iv_anim=(ImageView) root.findViewById(R.id.iv_anim);
+        iv_anim = (ImageView) root.findViewById(R.id.iv_anim);
         single = (Switch) root.findViewById(R.id.single);
         single.setChecked(true);
         single.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -144,29 +138,36 @@ public class HeartBeatFragment extends BaseFragment {
 
             }
         });
-        return root;
-    }
 
-    private void startAnim(){
-        single.setEnabled(false);
-        AnimationSet animationSet = new AnimationSet(true);
-        myAnimation_Scale =new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f,
+        myAnimation_Scale = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         myAnimation_Scale.setDuration(1000);
         myAnimation_Scale.setRepeatMode(Animation.RESTART);
         myAnimation_Scale.setRepeatCount(Integer.MAX_VALUE);
         animationSet.addAnimation(myAnimation_Scale);
+        return root;
+    }
+
+    private void startAnim() {
+        single.setEnabled(false);
         iv_anim.startAnimation(animationSet);
 
     }
-    public void stopAnim(){
-        single.setEnabled(true);
-        myAnimation_Scale.cancel();
+
+    public void stopAnim() {
+        if (single!=null){
+            single.setEnabled(true);
+        }
+
+        if (myAnimation_Scale != null) {
+            myAnimation_Scale.cancel();
+        }
     }
 
 
     public void closeHeart() {
         ble.closeHeartRateAsync(0);
+
     }
 
     public void refreshData() {
@@ -183,6 +184,7 @@ public class HeartBeatFragment extends BaseFragment {
 //            });
 //            dialog = builder.create();
 //            dialog.show();
+
             startAnim();
             BleController.getInstance().openHeartRateAsync(single.isChecked());
             rightTitle.setText(R.string.heartbeat_start);

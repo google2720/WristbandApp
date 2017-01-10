@@ -246,9 +246,9 @@ public class MainActivity extends BaseActivity implements TabListener {
             HeartBeatFragment heart = (HeartBeatFragment) heartBeatTab.getCurrentFragment();
             if (heart != null) {
                 TextView rightTextView = getRightTitle();
-                rightTextView.setText(R.string.heartbeat_stop);
+                rightTextView.setText(R.string.heartbeat_start);
                 heart.stopAnim();
-                heart.closeHeart();
+                //heart.closeHeart();
             }
         }
 

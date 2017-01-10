@@ -1187,7 +1187,6 @@ public class BleController {
         mDeviceReady = false;
         stopLeScan();
         closeAntiLose();
-        closeHeartRate();
         int state = historyController.getState();
         if (state == HistoryController.STATE_START || state == HistoryController.STATE_FETCHING) {
             mCallbacks.onFetchHistoryFailed(BleError.SYSTEM);
