@@ -242,17 +242,12 @@ public class MainActivity extends BaseActivity implements TabListener {
                 }
             });
         }
-        if (!(tab == heartBeatTab)) {
+        if (tab != heartBeatTab) {
             HeartBeatFragment heart = (HeartBeatFragment) heartBeatTab.getCurrentFragment();
             if (heart != null) {
-                TextView rightTextView = getRightTitle();
-                rightTextView.setText(R.string.heartbeat_start);
-                heart.stopAnim();
-                //heart.closeHeart();
+                heart.closeHeart();
             }
         }
-
-
     }
 
     @Override

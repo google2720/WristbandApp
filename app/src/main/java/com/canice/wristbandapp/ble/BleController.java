@@ -386,13 +386,14 @@ public class BleController {
     }
 
     @WorkerThread
-    public void bindDeviceNew() {
+    public void bindDeviceNew(boolean reconnect) {
         checkConnectionState();
-        Lg.i(TAG, "bindDeviceNew start");
+        Lg.i(TAG, "bindDeviceNew start " + reconnect);
         BluetoothDevice device = mBleConnection.getDevice();
         String address = device.getAddress();
-        BindQuery query = new BindQuery();
-        write2(query.toValue());
+        if (!reconnect) {
+            write2(new BindQuery().toValue());
+        }
         saveBindedDevice("", address);
         saveFailedBindedDevice(address, false);
         mCallbacks.onBindDeviceSuccess(device, !(address.equals(getBindedDeviceAddress())));
@@ -484,13 +485,13 @@ public class BleController {
         }
     }
 
-    public void bindDeviceAsync() {
+    public void bindDeviceAsync(final boolean reconnect) {
         EXECUTOR_SERVICE_SINGLE.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     if (BuildConfig.newFit) {
-                        bindDeviceNew();
+                        bindDeviceNew(reconnect);
                     } else {
                         bindDeviceOld();
                     }
@@ -806,20 +807,22 @@ public class BleController {
     }
 
     private class HeartRateTask extends AsyncTask<Void, Void, Void> {
-        boolean single;
-        public HeartRateTask(boolean single){
-            this.single=single;
+
+        private boolean single;
+
+        private HeartRateTask(boolean single) {
+            this.single = single;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                OpenRateDataResult result= openHeartRate();
-                if (result==null){
+                OpenRateDataResult result = openHeartRate();
+                if (result == null) {
                     mCallbacks.onGetHeartRateFailed();
                     return null;
                 }
-                if (single){
+                if (single) {
                     closeHeartRateAsync(30 * 1000);
                 }
                 while (!isCancelled()) {
@@ -1190,6 +1193,10 @@ public class BleController {
         int state = historyController.getState();
         if (state == HistoryController.STATE_START || state == HistoryController.STATE_FETCHING) {
             mCallbacks.onFetchHistoryFailed(BleError.SYSTEM);
+        }
+        if (heartRateTask != null) {
+            heartRateTask.cancel(true);
+            heartRateTask = null;
         }
     }
 

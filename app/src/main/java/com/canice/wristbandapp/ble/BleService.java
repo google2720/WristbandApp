@@ -60,7 +60,7 @@ public class BleService extends Service {
         public void onGattServicesDiscovered(BluetoothDevice device) {
             String address = device.getAddress();
             if (mBle.isAutoConnect() && address.equals(mBle.getBindedDeviceAddress())) {
-                mBle.bindDeviceAsync();
+                mBle.bindDeviceAsync(true);
             }
         }
 

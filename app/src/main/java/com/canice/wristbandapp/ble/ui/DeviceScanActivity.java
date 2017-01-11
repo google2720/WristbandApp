@@ -106,7 +106,7 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
                     if (dialog != null) {
                         dialog.setMessage(getString(R.string.device_binding));
                     }
-                    mBle.bindDeviceAsync();
+                    mBle.bindDeviceAsync(false);
                 }
             });
         }
