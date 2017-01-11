@@ -110,11 +110,8 @@ public class HeartBeatFragment extends BaseFragment {
                 }
                 if (rightTitle.getText().toString().equals(getString(R.string.heartbeat_start))) {
                     openHeart();
-
                 } else {
                     closeHeart();
-                    stopAnim();
-                    rightTitle.setText(R.string.heartbeat_start);
                 }
             }
         });
