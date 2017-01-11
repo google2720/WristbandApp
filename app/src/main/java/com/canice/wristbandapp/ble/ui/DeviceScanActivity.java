@@ -60,10 +60,11 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    String name = device.getName();
-                    if (name != null && name.startsWith("BCD")) {
-                        mLeDeviceListAdapter.addDevice(device);
-                        mLeDeviceListAdapter.notifyDataSetChanged();
+                    if (!isFinishing()) {
+                        String name = device.getName();
+                        if (name != null && name.startsWith("BCD")) {
+                            mLeDeviceListAdapter.addDevice(device);
+                        }
                     }
                 }
             });
@@ -74,10 +75,12 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    HintUtils.showShortToast(getApplicationContext(), R.string.device_scan_failed);
-                    scanLeDevice(false);
-                    mLeDeviceListAdapter.clear();
-                    scanLeDevice(true);
+                    if (!isFinishing()) {
+                        HintUtils.showShortToast(getApplicationContext(), R.string.device_scan_failed);
+                        scanLeDevice(false);
+                        mLeDeviceListAdapter.clear();
+                        scanLeDevice(true);
+                    }
                 }
             });
         }
@@ -87,13 +90,15 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (dialog != null) {
-                        dialog.dismiss();
+                    if (!isFinishing()) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                        HintUtils.showShortToast(getApplicationContext(), R.string.device_connect_failed);
+                        scanLeDevice(false);
+                        mLeDeviceListAdapter.clear();
+                        scanLeDevice(true);
                     }
-                    HintUtils.showShortToast(getApplicationContext(), R.string.device_connect_failed);
-                    scanLeDevice(false);
-                    mLeDeviceListAdapter.clear();
-                    scanLeDevice(true);
                 }
             });
         }
@@ -103,10 +108,12 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (dialog != null) {
-                        dialog.setMessage(getString(R.string.device_binding));
+                    if (!isFinishing()) {
+                        if (dialog != null) {
+                            dialog.setMessage(getString(R.string.device_binding));
+                        }
+                        mBle.bindDeviceAsync(false);
                     }
-                    mBle.bindDeviceAsync(false);
                 }
             });
         }
@@ -116,13 +123,15 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (dialog != null) {
-                        dialog.dismiss();
+                    if (!isFinishing()) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                        HintUtils.showShortToast(getApplicationContext(), R.string.device_bind_failed);
+                        scanLeDevice(false);
+                        mLeDeviceListAdapter.clear();
+                        scanLeDevice(true);
                     }
-                    HintUtils.showShortToast(getApplicationContext(), R.string.device_bind_failed);
-                    scanLeDevice(false);
-                    mLeDeviceListAdapter.clear();
-                    scanLeDevice(true);
                 }
             });
         }
@@ -132,17 +141,18 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mBle.setAutoConnect(true);
-                    mBle.setAutoReconnect(true);
-                    HintUtils.showShortToast(getApplicationContext(), R.string.device_bind_success);
-                    if (dialog != null) {
-                        dialog.dismiss();
+                    if (!isFinishing()) {
+                        mBle.setAutoConnect(true);
+                        mBle.setAutoReconnect(true);
+                        HintUtils.showShortToast(getApplicationContext(), R.string.device_bind_success);
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                        if (firstBinded && !BuildConfig.newFit) {
+                            HintUtils.showShortToast(getApplicationContext(), R.string.device_bind_delay);
+                        }
+                        finish();
                     }
-                    if (firstBinded && !BuildConfig.newFit) {
-                        HintUtils.showShortToast(getApplicationContext(), R.string.device_bind_delay);
-                    }
-
-                    finish();
                 }
             });
         }
@@ -207,17 +217,15 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
         myHandler.sendEmptyMessageDelayed(100, 60 * 1000);
     }
 
-    Handler myHandler = new Handler() {
+    private Handler myHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
             switch (msg.what) {
-                case 100: {
+                case 100:
                     if (dialog != null) {
                         dialog.dismiss();
                     }
-                }
-                break;
+                    break;
                 default:
                     break;
             }
@@ -269,6 +277,7 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
         public void addDevice(BluetoothDevice device) {
             if (!mLeDevices.contains(device)) {
                 mLeDevices.add(device);
+                notifyDataSetChanged();
             }
         }
 
@@ -278,6 +287,7 @@ public class DeviceScanActivity extends BaseActivity implements OnItemClickListe
 
         public void clear() {
             mLeDevices.clear();
+            notifyDataSetChanged();
         }
 
         @Override
