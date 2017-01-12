@@ -142,6 +142,7 @@ public class BleController {
         }
     };
     private HeartRateTask heartRateTask;
+    private boolean heartRateStart;
 
     private BleController() {
         mCallbacks = new GroupBleCallback();
@@ -525,7 +526,7 @@ public class BleController {
                 try {
                     mCallbacks.onFetchPedometerDataSuccess(fetchPedometerData());
                 } catch (Exception e) {
-                    Lg.w(TAG, e.toString());
+                    Lg.w(TAG, "failed to fetch pedometer data", e);
                     mCallbacks.onFetchPedometerDataFailed(null);
                 }
             }
@@ -702,7 +703,7 @@ public class BleController {
                         fetchHistory();
                     }
                 } catch (Exception e) {
-                    Lg.w(TAG, e.toString());
+                    Lg.w(TAG, "failed to fetch history", e);
                     mCallbacks.onFetchHistoryFailed(BleError.SYSTEM);
                 }
             }
@@ -781,6 +782,10 @@ public class BleController {
         return OpenRateDataResult.parser(write(data.toValue()));
     }
 
+    public boolean isHeartRateStart() {
+        return heartRateStart;
+    }
+
     /**
      * 打开心率测试
      */
@@ -790,9 +795,11 @@ public class BleController {
                 @Override
                 public void run() {
                     try {
+                        heartRateStart = true;
                         openHeartRate();
                         closeHeartRateAsync(30 * 1000);
                     } catch (Exception e) {
+                        heartRateStart = false;
                         mCallbacks.onGetHeartRateFailed();
                     }
                 }
@@ -801,6 +808,7 @@ public class BleController {
             if (heartRateTask != null) {
                 heartRateTask.cancel(true);
             }
+            heartRateStart = true;
             heartRateTask = new HeartRateTask(single);
             heartRateTask.executeOnExecutor(EXECUTOR_SERVICE_POOL);
         }
@@ -868,6 +876,7 @@ public class BleController {
                         heartRateTask.cancel(true);
                         heartRateTask = null;
                     }
+                    heartRateStart = false;
                     closeHeartRate();
                 } catch (Exception e) {
                     Lg.w(TAG, "failed to close heart rate", e);
@@ -1194,6 +1203,8 @@ public class BleController {
         if (state == HistoryController.STATE_START || state == HistoryController.STATE_FETCHING) {
             mCallbacks.onFetchHistoryFailed(BleError.SYSTEM);
         }
+        heartRateStart = false;
+        mHandler.removeCallbacks(mCloseHeartRateRunnable);
         if (heartRateTask != null) {
             heartRateTask.cancel(true);
             heartRateTask = null;
@@ -1207,7 +1218,7 @@ public class BleController {
                 try {
                     mCallbacks.onFetchPedometerDataSuccess(fetchPedometerData());
                 } catch (Exception e) {
-                    Lg.w(TAG, e.toString());
+                    Lg.w(TAG, "failed to fetch pedometer data", e);
                     mCallbacks.onFetchPedometerDataFailed(null);
                     return;
                 }
@@ -1220,7 +1231,7 @@ public class BleController {
                         fetchHistory();
                     }
                 } catch (Exception e) {
-                    Lg.w(TAG, e.toString());
+                    Lg.w(TAG, "failed to fetch history data", e);
                     mCallbacks.onFetchHistoryFailed(BleError.SYSTEM);
                 }
             }

@@ -22,6 +22,7 @@ import com.canice.wristbandapp.activity.fragment.PersonalFragment;
 import com.canice.wristbandapp.activity.fragment.RangeFragment;
 import com.canice.wristbandapp.activity.fragment.SleepFragment;
 import com.canice.wristbandapp.activity.fragment.SportFragment;
+import com.canice.wristbandapp.ble.BleController;
 import com.canice.wristbandapp.ble.db.BleDao;
 import com.canice.wristbandapp.util.Constants;
 import com.canice.wristbandapp.widget.BottomPaneView;
@@ -244,7 +245,7 @@ public class MainActivity extends BaseActivity implements TabListener {
         }
         if (tab != heartBeatTab) {
             HeartBeatFragment heart = (HeartBeatFragment) heartBeatTab.getCurrentFragment();
-            if (heart != null) {
+            if (heart != null && BleController.getInstance().isHeartRateStart()) {
                 heart.closeHeart();
             }
         }
