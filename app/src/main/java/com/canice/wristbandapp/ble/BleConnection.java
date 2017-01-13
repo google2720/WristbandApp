@@ -134,11 +134,11 @@ public class BleConnection {
     private BluetoothDevice mmDevice;
 
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, BluetoothGattDescriptor descriptor, boolean enabled) {
-        if (mBluetoothGatt == null) {
-            Lg.w(TAG, "BluetoothAdapter not initialized");
-            return;
-        }
         synchronized (mObject) {
+            if (mBluetoothGatt == null) {
+                Lg.w(TAG, "BluetoothAdapter not initialized");
+                return;
+            }
             boolean r = mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
             Lg.d(TAG, "setCharacteristicNotification " + r);
             byte[] data = enabled ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
@@ -173,29 +173,33 @@ public class BleConnection {
         }
     }
 
-    public byte[] read(BluetoothGattCharacteristic characteristic) {
+    public byte[] read(BluetoothGattCharacteristic characteristic) throws InterruptedException {
         synchronized (mObject) {
-            mBluetoothGatt.readCharacteristic(characteristic);
-            try {
-                mObject.wait(TIMEOUT_MILLIS);
-            } catch (InterruptedException e) {
-                // ignore
+            if (mBluetoothGatt == null) {
+                Lg.w(TAG, "BluetoothAdapter not initialized");
+                return null;
             }
+            mBluetoothGatt.readCharacteristic(characteristic);
+            mObject.wait(TIMEOUT_MILLIS);
             byte[] data = characteristic.getValue();
             Lg.d("BleData", "read data [" + toHex(data) + "]");
             return data;
         }
     }
 
-    public void write(BluetoothGattCharacteristic characteristic, byte[] data) {
+    public void write(BluetoothGattCharacteristic characteristic, byte[] data) throws InterruptedException {
         synchronized (mObject) {
+            if (mBluetoothGatt == null) {
+                Lg.w(TAG, "BluetoothAdapter not initialized");
+                return;
+            }
             characteristic.setValue(data);
             boolean r = mBluetoothGatt.writeCharacteristic(characteristic);
             Lg.d("BleData", "write data " + (r ? "success " : "failed ") + "[" + toHex(data) + "]");
-            try {
+            if (r) {
                 mObject.wait(TIMEOUT_MILLIS);
-            } catch (InterruptedException e) {
-                // ignore
+            } else {
+                throw new RuntimeException("failed to write data");
             }
         }
     }

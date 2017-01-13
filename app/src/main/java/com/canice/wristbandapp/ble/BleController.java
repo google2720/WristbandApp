@@ -141,8 +141,7 @@ public class BleController {
             });
         }
     };
-    private HeartRateTask heartRateTask;
-    private boolean heartRateStart;
+    private volatile boolean heartRateStart;
 
     private BleController() {
         mCallbacks = new GroupBleCallback();
@@ -349,27 +348,35 @@ public class BleController {
         }
     }
 
-    private byte[] write(byte[] data) {
-        checkThread();
-        checkConnectionState();
+    private byte[] write(byte[] data) throws InterruptedException {
         synchronized (mLock) {
+            checkThread();
+            checkConnectionState();
             mBleConnection.write(mDataCharacteristic, data);
             return mBleConnection.read(mDataCharacteristic);
         }
     }
 
-    private void write2(byte[] data) {
-        checkThread();
-        checkConnectionState();
+    private void write2(byte[] data) throws InterruptedException {
         synchronized (mLock) {
+            checkThread();
+            checkConnectionState();
             mBleConnection.write(mDataCharacteristic, data);
         }
     }
 
-    private void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, BluetoothGattDescriptor descriptor, boolean enable) {
-        checkThread();
-        checkConnectionState();
+    private byte[] read() throws InterruptedException {
         synchronized (mLock) {
+            checkThread();
+            checkConnectionState();
+            return mBleConnection.read(mDataCharacteristic);
+        }
+    }
+
+    private void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, BluetoothGattDescriptor descriptor, boolean enable) {
+        synchronized (mLock) {
+            checkThread();
+            checkConnectionState();
             mBleConnection.setCharacteristicNotification(characteristic, descriptor, enable);
         }
     }
@@ -387,7 +394,7 @@ public class BleController {
     }
 
     @WorkerThread
-    public void bindDeviceNew(boolean reconnect) {
+    public void bindDeviceNew(boolean reconnect) throws InterruptedException {
         checkConnectionState();
         Lg.i(TAG, "bindDeviceNew start " + reconnect);
         BluetoothDevice device = mBleConnection.getDevice();
@@ -435,7 +442,7 @@ public class BleController {
     }
 
     @WorkerThread
-    public void bindDevice() {
+    public void bindDevice() throws InterruptedException {
         checkConnectionState();
         Lg.i(TAG, "bindDevice start");
         BluetoothDevice device = mBleConnection.getDevice();
@@ -505,7 +512,7 @@ public class BleController {
     }
 
     @WorkerThread
-    private PedometerDataResult fetchPedometerData() {
+    private PedometerDataResult fetchPedometerData() throws InterruptedException {
         checkConnectionState();
         String address = getBindedDeviceAddress();
         Lg.i(TAG, address + " fetch pedometer data start");
@@ -534,7 +541,7 @@ public class BleController {
     }
 
     @WorkerThread
-    private void syncSystemDate() {
+    private void syncSystemDate() throws InterruptedException {
         checkConnectionState();
         String address = getBindedDeviceAddress();
         long currentTime = (System.currentTimeMillis() - Tools.get2000Time()) / 1000;
@@ -581,7 +588,7 @@ public class BleController {
     }
 
     @WorkerThread
-    private void fetchVersionInfo() {
+    private void fetchVersionInfo() throws InterruptedException {
         checkConnectionState();
         String address = getBindedDeviceAddress();
         Lg.i(TAG, address + " fetch version info start");
@@ -711,7 +718,7 @@ public class BleController {
     }
 
     @WorkerThread
-    private void fetchHistory() {
+    private void fetchHistory() throws InterruptedException {
         mCallbacks.onFetchHistoryStart();
         checkConnectionState();
         String address = getBindedDeviceAddress();
@@ -749,7 +756,7 @@ public class BleController {
         mCallbacks.onFetchHistorySuccess();
     }
 
-    private void fetchHistoryByNotify() {
+    private void fetchHistoryByNotify() throws InterruptedException {
         mCallbacks.onFetchHistoryStart();
         checkThread();
         checkConnectionState();
@@ -772,7 +779,7 @@ public class BleController {
         write2(data.toValue());
     }
 
-    private OpenRateDataResult openHeartRate() {
+    private OpenRateDataResult openHeartRate() throws InterruptedException {
         checkConnectionState();
         Lg.i(TAG, " open heart rate start");
         if (BuildConfig.HEART_RATE_NOTIFY) {
@@ -805,11 +812,8 @@ public class BleController {
                 }
             });
         } else {
-            if (heartRateTask != null) {
-                heartRateTask.cancel(true);
-            }
             heartRateStart = true;
-            heartRateTask = new HeartRateTask(single);
+            HeartRateTask heartRateTask = new HeartRateTask(single);
             heartRateTask.executeOnExecutor(EXECUTOR_SERVICE_POOL);
         }
     }
@@ -830,32 +834,37 @@ public class BleController {
                     mCallbacks.onGetHeartRateFailed();
                     return null;
                 }
-                if (single) {
+                if (heartRateStart && single) {
                     closeHeartRateAsync(30 * 1000);
                 }
-                while (!isCancelled()) {
-                    PedometerData data = new PedometerData();
-                    PedometerDataResult r = PedometerDataResult.parser(write(data.toValue()));
-                    if (r != null) {
+                while (heartRateStart) {
+                    PedometerDataResult r = PedometerDataResult.parser(write(new PedometerData().toValue()));
+                    if (heartRateStart && r != null) {
                         mCallbacks.onGetHeartRateSuccess(r.getHeartRate());
                     }
-                    SystemClock.sleep(2000);
+                    if (heartRateStart) {
+                        SystemClock.sleep(2000);
+                    }
                 }
             } catch (Exception e) {
+                Lg.w(TAG, "failed to heart rate", e);
                 mCallbacks.onGetHeartRateFailed();
             }
             return null;
         }
     }
 
-    private void closeHeartRate() {
-        checkConnectionState();
-        Lg.i(TAG, "close heart rate start");
-        write(new CloseHeartRateData().toValue());
-        if (BuildConfig.HEART_RATE_NOTIFY) {
-            setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
+    private void closeHeartRate() throws InterruptedException {
+        try {
+            checkConnectionState();
+            Lg.i(TAG, "close heart rate start");
+            if (BuildConfig.HEART_RATE_NOTIFY) {
+                setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
+            }
+            write(new CloseHeartRateData().toValue());
+        } finally {
+            mCallbacks.onCloseHeartRate();
         }
-        mCallbacks.onCloseHeartRate();
     }
 
     public void closeHeartRateAsync(long delayMillis) {
@@ -872,10 +881,6 @@ public class BleController {
             @Override
             public void run() {
                 try {
-                    if (heartRateTask != null) {
-                        heartRateTask.cancel(true);
-                        heartRateTask = null;
-                    }
                     heartRateStart = false;
                     closeHeartRate();
                 } catch (Exception e) {
@@ -1003,7 +1008,7 @@ public class BleController {
         return phone;
     }
 
-    private void sendCallRemind(String phone) {
+    private void sendCallRemind(String phone) throws InterruptedException {
         checkConnectionState();
         phone = filterPhone(phone);
         String address = getBindedDeviceAddress();
@@ -1019,7 +1024,7 @@ public class BleController {
         }
     }
 
-    private void sendMessageRemind(String phone) {
+    private void sendMessageRemind(String phone) throws InterruptedException {
         checkConnectionState();
         phone = filterPhone(phone);
         String address = getBindedDeviceAddress();
@@ -1072,7 +1077,7 @@ public class BleController {
         return shared.getBoolean(BLE_SYNC_BASE_DATA_FAILED, false);
     }
 
-    private void syncBaseData(boolean clear) {
+    private void syncBaseData(boolean clear) throws InterruptedException {
         checkConnectionState();
         String address = getBindedDeviceAddress();
         Lg.i(TAG, address + " sync base data start");
@@ -1205,10 +1210,6 @@ public class BleController {
         }
         heartRateStart = false;
         mHandler.removeCallbacks(mCloseHeartRateRunnable);
-        if (heartRateTask != null) {
-            heartRateTask.cancel(true);
-            heartRateTask = null;
-        }
     }
 
     public void fetchDataAsync() {

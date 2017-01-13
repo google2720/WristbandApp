@@ -37,7 +37,7 @@ public class APP extends Application {
         super.onCreate();
         Lg.setLg(new AndroidLgImpl(this));
         Lg.setLevel(BuildConfig.LOG_LEVEL);
-        Log.i(TAG, this + " onCreate");
+        Lg.i(TAG, this + " onCreate " + BuildConfig.VERSION_CODE);
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         Log.i(TAG, this + " onCreate2");
         client = new AsyncHttpClient();
