@@ -107,6 +107,16 @@ public class SportFragment extends BaseFragment {
                 }
             });
         }
+
+        @Override
+        public void onRefreshGoal() {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshCurrentData();
+                }
+            });
+        }
     };
 
     @Override

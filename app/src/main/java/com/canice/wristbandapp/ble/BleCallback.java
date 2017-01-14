@@ -52,4 +52,6 @@ public interface BleCallback {
     void onRemoteRssi(BluetoothDevice device, int rssi);
 
     void onBluetoothOff();
+
+    void onRefreshGoal();
 }

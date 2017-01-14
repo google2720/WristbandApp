@@ -99,4 +99,8 @@ public class SimpleBleCallback implements BleCallback {
     @Override
     public void onBluetoothOff() {
     }
+
+    @Override
+    public void onRefreshGoal() {
+    }
 }

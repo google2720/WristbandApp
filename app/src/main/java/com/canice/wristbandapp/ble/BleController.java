@@ -868,8 +868,8 @@ public class BleController {
 
     private void closeHeartRate() throws InterruptedException {
         try {
-            checkConnectionState();
             Lg.i(TAG, "close heart rate start");
+            checkConnectionState();
             if (BuildConfig.HEART_RATE_NOTIFY) {
                 setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
             }
@@ -894,11 +894,11 @@ public class BleController {
             @Override
             public void run() {
                 try {
+                    heartRateStart = false;
                     closeHeartRate();
                 } catch (Exception e) {
                     Lg.w(TAG, "failed to close heart rate", e);
                 }
-                heartRateStart = false;
             }
         });
     }

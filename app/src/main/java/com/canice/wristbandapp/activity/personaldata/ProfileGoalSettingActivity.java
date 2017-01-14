@@ -76,8 +76,10 @@ public class ProfileGoalSettingActivity extends BaseActivity implements OnClickL
                 public void onClick(View v) {
                     int goal = sb_goal_scale.getProgress() * 100 + 5000;
                     UserController.saveGoal(getBaseContext(), goal);
-                    BleController.getInstance().syncBaseDataAsync();
-                    BleController.getInstance().fetchPedometerDataAsync();
+                    BleController ble = BleController.getInstance();
+                    ble.getCallbacks().onRefreshGoal();
+                    ble.syncBaseDataAsync();
+                    ble.fetchPedometerDataAsync();
                     finish();
                 }
             });

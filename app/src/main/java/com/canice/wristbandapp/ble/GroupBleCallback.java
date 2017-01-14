@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class GroupBleCallback implements BleCallback {
 
-    private CopyOnWriteArraySet<BleCallback> listeners = new CopyOnWriteArraySet<BleCallback>();
+    private CopyOnWriteArraySet<BleCallback> listeners = new CopyOnWriteArraySet<>();
 
     public synchronized void addListener(BleCallback listener) {
         listeners.add(listener);
@@ -172,6 +172,13 @@ public class GroupBleCallback implements BleCallback {
     public void onBluetoothOff() {
         for (BleCallback l : listeners) {
             l.onBluetoothOff();
+        }
+    }
+
+    @Override
+    public void onRefreshGoal() {
+        for (BleCallback l : listeners) {
+            l.onRefreshGoal();
         }
     }
 }
