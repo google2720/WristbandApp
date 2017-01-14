@@ -26,7 +26,7 @@ import com.canice.wristbandapp.util.HintUtils;
 public class HeartBeatFragment extends BaseFragment {
 
     private MainActivity mActivity;
-    private BleController ble;
+    private BleController ble = BleController.getInstance();
     private TextView tv_heartbeat;
     private boolean firstSuccess;
     private Switch singleView;
@@ -120,7 +120,6 @@ public class HeartBeatFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (MainActivity) getActivity();
-        ble = BleController.getInstance();
         ble.addCallback(cb);
         // 如果没有打开蓝牙，先提醒用户打开蓝牙
         if (!ble.isEnabled()) {
@@ -173,9 +172,11 @@ public class HeartBeatFragment extends BaseFragment {
     }
 
     public void openHeart() {
-        firstSuccess = true;
-        BleController.getInstance().openHeartRateAsync(singleView.isChecked());
-        startAnim();
+        if (!ble.isHeartRateStart()) {
+            firstSuccess = true;
+            startAnim();
+            ble.openHeartRateAsync(singleView.isChecked());
+        }
     }
 
     @Override

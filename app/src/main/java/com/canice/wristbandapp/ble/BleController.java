@@ -797,6 +797,7 @@ public class BleController {
      * 打开心率测试
      */
     public void openHeartRateAsync(boolean single) {
+        Lg.i(TAG, "open heart rate async start");
         if (BuildConfig.HEART_RATE_NOTIFY) {
             EXECUTOR_SERVICE_SINGLE.execute(new Runnable() {
                 @Override
@@ -856,6 +857,7 @@ public class BleController {
                         SystemClock.sleep(2000);
                     }
                 }
+                Lg.i(TAG, "heart rate finish");
             } catch (Exception e) {
                 Lg.w(TAG, "failed to heart rate", e);
                 mCallbacks.onGetHeartRateFailed();
@@ -871,7 +873,7 @@ public class BleController {
             if (BuildConfig.HEART_RATE_NOTIFY) {
                 setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
             }
-            write(new CloseHeartRateData().toValue());
+            write2(new CloseHeartRateData().toValue());
         } finally {
             mCallbacks.onCloseHeartRate();
         }
@@ -892,11 +894,11 @@ public class BleController {
             @Override
             public void run() {
                 try {
-                    heartRateStart = false;
                     closeHeartRate();
                 } catch (Exception e) {
                     Lg.w(TAG, "failed to close heart rate", e);
                 }
+                heartRateStart = false;
             }
         });
     }
