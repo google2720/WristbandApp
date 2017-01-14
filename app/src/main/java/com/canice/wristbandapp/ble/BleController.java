@@ -837,8 +837,18 @@ public class BleController {
                 if (heartRateStart && single) {
                     closeHeartRateAsync(30 * 1000);
                 }
+                PedometerDataResult r;
                 while (heartRateStart) {
-                    PedometerDataResult r = PedometerDataResult.parser(write(new PedometerData().toValue()));
+                    synchronized (mLock) {
+                        checkThread();
+                        checkConnectionState();
+                        mBleConnection.write(mDataCharacteristic, new PedometerData().toValue());
+                        if (heartRateStart) {
+                            r = PedometerDataResult.parser(mBleConnection.read(mDataCharacteristic));
+                        } else {
+                            r = null;
+                        }
+                    }
                     if (heartRateStart && r != null) {
                         mCallbacks.onGetHeartRateSuccess(r.getHeartRate());
                     }
@@ -876,6 +886,7 @@ public class BleController {
      * 关闭心率测试
      */
     public void closeHeartRateAsync() {
+        Lg.i(TAG, "close heart rate aysnc start");
         mHandler.removeCallbacks(mCloseHeartRateRunnable);
         EXECUTOR_SERVICE_SINGLE.execute(new Runnable() {
             @Override

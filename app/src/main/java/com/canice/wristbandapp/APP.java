@@ -3,7 +3,6 @@ package com.canice.wristbandapp;
 import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 
 import com.canice.wristbandapp.ble.BleController;
 import com.canice.wristbandapp.ble.BleService;
@@ -37,14 +36,11 @@ public class APP extends Application {
         super.onCreate();
         Lg.setLg(new AndroidLgImpl(this));
         Lg.setLevel(BuildConfig.LOG_LEVEL);
-        Lg.i(TAG, this + " onCreate " + BuildConfig.VERSION_CODE);
+        Lg.i(TAG, this + " onCreate " + BuildConfig.VERSION_NAME + " " + BuildConfig.VERSION_CODE);
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
-        Log.i(TAG, this + " onCreate2");
         client = new AsyncHttpClient();
-        Log.i(TAG, this + " onCreate3");
         BleController.getInstance().initialize(this);
         BleService.actionStart(this);
-        Log.i(TAG, this + " onCreate4");
     }
 
     public static Dialog getDialog(Context context) {

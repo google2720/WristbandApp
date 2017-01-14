@@ -29,7 +29,7 @@ public class HeartBeatFragment extends BaseFragment {
     private BleController ble;
     private TextView tv_heartbeat;
     private boolean firstSuccess;
-    private Switch single;
+    private Switch singleView;
     private TextView rightTitle;
     private ScaleAnimation myAnimation_Scale;
     private ImageView iv_anim;
@@ -78,7 +78,7 @@ public class HeartBeatFragment extends BaseFragment {
                     tv_heartbeat.setText(String.valueOf(value));
                     if (firstSuccess) {
                         firstSuccess = false;
-                        if (single.isChecked()) {
+                        if (singleView.isChecked()) {
                             ble.closeHeartRateAsync(10 * 1000);
                         }
                     }
@@ -92,8 +92,7 @@ public class HeartBeatFragment extends BaseFragment {
                 @Override
                 public void run() {
                     Log.i(TAG, "onGetHeartRateFailed");
-                    rightTitle.setText(R.string.heartbeat_start);
-                    ble.closeHeartRateAsync();
+                    stopAnim();
                 }
             });
         }
@@ -135,8 +134,8 @@ public class HeartBeatFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.layout_heartbeat, container, false);
         tv_heartbeat = (TextView) root.findViewById(R.id.tv_heartbeat);
         iv_anim = (ImageView) root.findViewById(R.id.iv_anim);
-        single = (Switch) root.findViewById(R.id.single);
-        single.setChecked(true);
+        singleView = (Switch) root.findViewById(R.id.single);
+        singleView.setChecked(true);
 
         myAnimation_Scale = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         myAnimation_Scale.setDuration(1000);
@@ -147,15 +146,18 @@ public class HeartBeatFragment extends BaseFragment {
     }
 
     private void startAnim() {
-        single.setEnabled(false);
+        singleView.setEnabled(false);
         iv_anim.startAnimation(animationSet);
         rightTitle.setText(R.string.heartbeat_stop);
         tv_heartbeat.setText("0");
     }
 
     public void stopAnim() {
-        if (single != null) {
-            single.setEnabled(true);
+        if (!isAdded() || getActivity() == null) {
+            return;
+        }
+        if (singleView != null) {
+            singleView.setEnabled(true);
         }
         if (myAnimation_Scale != null) {
             myAnimation_Scale.cancel();
@@ -172,7 +174,7 @@ public class HeartBeatFragment extends BaseFragment {
 
     public void openHeart() {
         firstSuccess = true;
-        BleController.getInstance().openHeartRateAsync(single.isChecked());
+        BleController.getInstance().openHeartRateAsync(singleView.isChecked());
         startAnim();
     }
 
