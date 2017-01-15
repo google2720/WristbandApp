@@ -29,7 +29,7 @@ public class HeartBeatFragment extends BaseFragment {
     private TextView heartbeatView;
     private Switch singleView;
     private TextView rightTitle;
-    private ImageView iv_anim;
+    private ImageView animView;
     private AnimationSet animationSet = new AnimationSet(true);
     private BleCallback cb = new SimpleBleCallback() {
 
@@ -54,6 +54,9 @@ public class HeartBeatFragment extends BaseFragment {
         @Override
         public void onCloseHeartRateStart() {
             Log.i(TAG, "onCloseHeartRateStart");
+            if (animView != null) {
+                animView.clearAnimation();
+            }
             if (rightTitle != null) {
                 rightTitle.setText(getString(R.string.heartbeat_pre_stop));
             }
@@ -102,7 +105,7 @@ public class HeartBeatFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.layout_heartbeat, container, false);
         heartbeatView = (TextView) root.findViewById(R.id.tv_heartbeat);
-        iv_anim = (ImageView) root.findViewById(R.id.iv_anim);
+        animView = (ImageView) root.findViewById(R.id.iv_anim);
         singleView = (Switch) root.findViewById(R.id.single);
         singleView.setChecked(true);
 
@@ -116,7 +119,7 @@ public class HeartBeatFragment extends BaseFragment {
 
     private void startAnim() {
         singleView.setEnabled(false);
-        iv_anim.startAnimation(animationSet);
+        animView.startAnimation(animationSet);
         rightTitle.setText(R.string.heartbeat_stop);
         heartbeatView.setText("0");
     }
@@ -132,8 +135,8 @@ public class HeartBeatFragment extends BaseFragment {
         if (singleView != null) {
             singleView.setEnabled(true);
         }
-        if (animationSet != null) {
-            animationSet.cancel();
+        if (animView != null) {
+            animView.clearAnimation();
         }
         if (rightTitle != null && changeRightView) {
             rightTitle.setText(getString(R.string.heartbeat_start));

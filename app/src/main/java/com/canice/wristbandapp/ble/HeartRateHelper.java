@@ -1,5 +1,6 @@
 package com.canice.wristbandapp.ble;
 
+import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +39,11 @@ public class HeartRateHelper {
         ble.addCallback(new SimpleBleCallback() {
             @Override
             public void onBluetoothOff() {
+                closeHeartRateInner();
+            }
+
+            @Override
+            public void onGattDisconnected(BluetoothDevice device) {
                 closeHeartRateInner();
             }
         });
