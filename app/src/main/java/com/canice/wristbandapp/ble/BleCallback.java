@@ -41,12 +41,6 @@ public interface BleCallback {
 
     void onFetchHistorySuccess();
 
-    void onGetHeartRateSuccess(int value);
-
-    void onGetHeartRateFailed();
-
-    void onCloseHeartRate();
-
     void onSosNotify(byte[] data);
 
     void onRemoteRssi(BluetoothDevice device, int rssi);
@@ -54,4 +48,14 @@ public interface BleCallback {
     void onBluetoothOff();
 
     void onRefreshGoal();
+
+    void onGetHeartRateStart();
+
+    void onGetHeartRateSuccess(int value);
+
+    void onGetHeartRateFailed();
+
+    void onCloseHeartRateStart();
+
+    void onCloseHeartRateFinish();
 }

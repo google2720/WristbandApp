@@ -1,7 +1,6 @@
 package com.canice.wristbandapp.activity.fragment;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -17,84 +16,53 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.canice.wristbandapp.R;
-import com.canice.wristbandapp.activity.MainActivity;
 import com.canice.wristbandapp.ble.BleCallback;
 import com.canice.wristbandapp.ble.BleController;
+import com.canice.wristbandapp.ble.HeartRateHelper;
 import com.canice.wristbandapp.ble.SimpleBleCallback;
 import com.canice.wristbandapp.util.HintUtils;
 
 public class HeartBeatFragment extends BaseFragment {
 
-    private MainActivity mActivity;
     private BleController ble = BleController.getInstance();
-    private TextView tv_heartbeat;
-    private boolean firstSuccess;
+    private HeartRateHelper helper = ble.getHeartRateHelper();
+    private TextView heartbeatView;
     private Switch singleView;
     private TextView rightTitle;
-    private ScaleAnimation myAnimation_Scale;
     private ImageView iv_anim;
     private AnimationSet animationSet = new AnimationSet(true);
     private BleCallback cb = new SimpleBleCallback() {
 
         @Override
-        public void onBluetoothOff() {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i(TAG, "onBluetoothOff");
-                    stopAnim();
-                }
-            });
-        }
-
-        @Override
-        public void onGattDisconnected(BluetoothDevice device) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i(TAG, "onGattDisconnected");
-                    stopAnim();
-                }
-            });
-        }
-
-        @Override
-        public void onCloseHeartRate() {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i(TAG, "onCloseHeartRate");
-                    stopAnim();
-                }
-            });
+        public void onGetHeartRateStart() {
+            Log.i(TAG, "onGetHeartRateStart");
+            startAnim();
         }
 
         @Override
         public void onGetHeartRateSuccess(final int value) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i(TAG, "onGetHeartRateSuccess " + value);
-                    tv_heartbeat.setText(String.valueOf(value));
-                    if (firstSuccess) {
-                        firstSuccess = false;
-                        if (singleView.isChecked()) {
-                            ble.closeHeartRateAsync(10 * 1000);
-                        }
-                    }
-                }
-            });
+            Log.i(TAG, "onGetHeartRateSuccess " + value);
+            heartbeatView.setText(String.valueOf(value));
         }
 
         @Override
         public void onGetHeartRateFailed() {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i(TAG, "onGetHeartRateFailed");
-                    stopAnim();
-                }
-            });
+            Log.i(TAG, "onGetHeartRateFailed");
+            stopAnim();
+        }
+
+        @Override
+        public void onCloseHeartRateStart() {
+            Log.i(TAG, "onCloseHeartRateStart");
+            if (rightTitle != null) {
+                rightTitle.setText(getString(R.string.heartbeat_pre_stop));
+            }
+        }
+
+        @Override
+        public void onCloseHeartRateFinish() {
+            Log.i(TAG, "onCloseHeartRateFinish");
+            stopAnim();
         }
     };
 
@@ -107,10 +75,11 @@ public class HeartBeatFragment extends BaseFragment {
                     HintUtils.showShortToast(getActivity(), getString(R.string.bind_faild));
                     return;
                 }
-                if (rightTitle.getText().toString().equals(getString(R.string.heartbeat_start))) {
-                    openHeart();
-                } else {
-                    closeHeart();
+                int state = helper.getState();
+                if (state == HeartRateHelper.STATE_START) {
+                    helper.closeHeartRateAsync(0);
+                } else if (state == HeartRateHelper.STATE_STOP) {
+                    helper.openHeartRateAsync(singleView.isChecked());
                 }
             }
         });
@@ -119,7 +88,6 @@ public class HeartBeatFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = (MainActivity) getActivity();
         ble.addCallback(cb);
         // 如果没有打开蓝牙，先提醒用户打开蓝牙
         if (!ble.isEnabled()) {
@@ -131,16 +99,16 @@ public class HeartBeatFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.layout_heartbeat, container, false);
-        tv_heartbeat = (TextView) root.findViewById(R.id.tv_heartbeat);
+        heartbeatView = (TextView) root.findViewById(R.id.tv_heartbeat);
         iv_anim = (ImageView) root.findViewById(R.id.iv_anim);
         singleView = (Switch) root.findViewById(R.id.single);
         singleView.setChecked(true);
 
-        myAnimation_Scale = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        myAnimation_Scale.setDuration(1000);
-        myAnimation_Scale.setRepeatMode(Animation.RESTART);
-        myAnimation_Scale.setRepeatCount(Integer.MAX_VALUE);
-        animationSet.addAnimation(myAnimation_Scale);
+        ScaleAnimation a = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        a.setDuration(1000);
+        a.setRepeatMode(Animation.RESTART);
+        a.setRepeatCount(Integer.MAX_VALUE);
+        animationSet.addAnimation(a);
         return root;
     }
 
@@ -148,34 +116,25 @@ public class HeartBeatFragment extends BaseFragment {
         singleView.setEnabled(false);
         iv_anim.startAnimation(animationSet);
         rightTitle.setText(R.string.heartbeat_stop);
-        tv_heartbeat.setText("0");
+        heartbeatView.setText("0");
     }
 
     public void stopAnim() {
+        stopAnim(true);
+    }
+
+    public void stopAnim(boolean changeRightView) {
         if (!isAdded() || getActivity() == null) {
             return;
         }
         if (singleView != null) {
             singleView.setEnabled(true);
         }
-        if (myAnimation_Scale != null) {
-            myAnimation_Scale.cancel();
+        if (animationSet != null) {
+            animationSet.cancel();
         }
-        if (rightTitle != null) {
+        if (rightTitle != null && changeRightView) {
             rightTitle.setText(getString(R.string.heartbeat_start));
-        }
-    }
-
-    public void closeHeart() {
-        ble.closeHeartRateAsync(0);
-        stopAnim();
-    }
-
-    public void openHeart() {
-        if (!ble.isHeartRateStart()) {
-            firstSuccess = true;
-            startAnim();
-            ble.openHeartRateAsync(singleView.isChecked());
         }
     }
 

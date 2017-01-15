@@ -59,6 +59,7 @@
     <string name="heartbeat_prompt">"Your heart rate will increase after sports. Don't worry. This is for your reference only."</string>
     <string name="heartbeat_testing">"Heart rate measuring..."</string>
     <string name="heartbeat_stop">"Stop"</string>
+    <string name="heartbeat_pre_stop">"Stopping"</string>
 
     <!-- 运动界面 -->
     <string name="sport_goal">"Target: <xillf>%s</xillf>"</string>

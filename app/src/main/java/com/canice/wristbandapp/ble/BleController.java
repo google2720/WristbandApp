@@ -14,7 +14,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -29,15 +29,12 @@ import com.canice.wristbandapp.ble.data.Bind;
 import com.canice.wristbandapp.ble.data.BindQuery;
 import com.canice.wristbandapp.ble.data.BindQueryResult;
 import com.canice.wristbandapp.ble.data.BindResult;
-import com.canice.wristbandapp.ble.data.CloseHeartRateData;
 import com.canice.wristbandapp.ble.data.Data;
 import com.canice.wristbandapp.ble.data.HeartRateDataResult;
 import com.canice.wristbandapp.ble.data.History;
 import com.canice.wristbandapp.ble.data.History2;
 import com.canice.wristbandapp.ble.data.HistoryResult;
 import com.canice.wristbandapp.ble.data.MessageRemind;
-import com.canice.wristbandapp.ble.data.OpenHeartRateData;
-import com.canice.wristbandapp.ble.data.OpenRateDataResult;
 import com.canice.wristbandapp.ble.data.PedometerData;
 import com.canice.wristbandapp.ble.data.PedometerDataResult;
 import com.canice.wristbandapp.ble.data.QQRemind;
@@ -85,8 +82,8 @@ public class BleController {
     private static final BleController sInstance = new BleController();
     private Context mContext;
     private static final Object mLock = new Object();
-    private final ExecutorService EXECUTOR_SERVICE_SINGLE = Executors.newSingleThreadExecutor();
-    private final Executor EXECUTOR_SERVICE_POOL = AsyncTask.THREAD_POOL_EXECUTOR;
+    final ExecutorService EXECUTOR_SERVICE_SINGLE = Executors.newSingleThreadExecutor();
+    final Executor EXECUTOR_SERVICE_POOL = AsyncTask.THREAD_POOL_EXECUTOR;
     private BluetoothAdapter mBleAdapter;
     private BleConnection mBleConnection;
     private GroupBleCallback mCallbacks;
@@ -116,12 +113,6 @@ public class BleController {
     private RssiHelper mRssiHelper = new RssiHelper();
     private HistoryController historyController;
     private Handler mHandler = new Handler(Looper.getMainLooper());
-    private Runnable mCloseHeartRateRunnable = new Runnable() {
-        @Override
-        public void run() {
-            closeHeartRateAsync();
-        }
-    };
     private Runnable mHistoryTimeOutRunnable = new Runnable() {
         @Override
         public void run() {
@@ -141,11 +132,12 @@ public class BleController {
             });
         }
     };
-    private volatile boolean heartRateStart;
+    private HeartRateHelper heartRateHelper;
 
     private BleController() {
         mCallbacks = new GroupBleCallback();
         historyController = new HistoryController(this);
+        heartRateHelper = new HeartRateHelper(this);
     }
 
     public static BleController getInstance() {
@@ -171,8 +163,19 @@ public class BleController {
         LocalBroadcastManager.getInstance(context).registerReceiver(mReceiver, filter);
     }
 
+    @NonNull
+    Object getLock() {
+        return mLock;
+    }
+
+    @NonNull
     public HistoryController getHistoryController() {
         return historyController;
+    }
+
+    @NonNull
+    public HeartRateHelper getHeartRateHelper() {
+        return heartRateHelper;
     }
 
     private void doReceiver(Context context, Intent intent, String action) {
@@ -348,32 +351,44 @@ public class BleController {
         }
     }
 
-    private byte[] write(byte[] data) throws InterruptedException {
+    byte[] write(byte[] data) throws InterruptedException {
+        return write(mDataCharacteristic, data);
+    }
+
+    byte[] write(BluetoothGattCharacteristic characteristic, byte[] data) throws InterruptedException {
         synchronized (mLock) {
             checkThread();
             checkConnectionState();
-            mBleConnection.write(mDataCharacteristic, data);
-            return mBleConnection.read(mDataCharacteristic);
+            mBleConnection.write(characteristic, data);
+            return mBleConnection.read(characteristic);
         }
     }
 
-    private void write2(byte[] data) throws InterruptedException {
+    void write2(byte[] data) throws InterruptedException {
+        write2(mDataCharacteristic, data);
+    }
+
+    void write2(BluetoothGattCharacteristic characteristic, byte[] data) throws InterruptedException {
         synchronized (mLock) {
             checkThread();
             checkConnectionState();
-            mBleConnection.write(mDataCharacteristic, data);
+            mBleConnection.write(characteristic, data);
         }
     }
 
-    private byte[] read() throws InterruptedException {
+    byte[] read() throws InterruptedException {
+        return read(mDataCharacteristic);
+    }
+
+    byte[] read(BluetoothGattCharacteristic characteristic) throws InterruptedException {
         synchronized (mLock) {
             checkThread();
             checkConnectionState();
-            return mBleConnection.read(mDataCharacteristic);
+            return mBleConnection.read(characteristic);
         }
     }
 
-    private void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, BluetoothGattDescriptor descriptor, boolean enable) {
+    void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, BluetoothGattDescriptor descriptor, boolean enable) {
         synchronized (mLock) {
             checkThread();
             checkConnectionState();
@@ -381,13 +396,13 @@ public class BleController {
         }
     }
 
-    private void checkConnectionState() {
+    void checkConnectionState() {
         if (!mDeviceReady) {
             throw new IllegalStateException("Bluetooth is not ready.");
         }
     }
 
-    private void checkThread() {
+    void checkThread() {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             throw new RuntimeException("It must be called on the background thread.");
         }
@@ -779,130 +794,6 @@ public class BleController {
         write2(data.toValue());
     }
 
-    private OpenRateDataResult openHeartRate() throws InterruptedException {
-        checkConnectionState();
-        Lg.i(TAG, " open heart rate start");
-        if (BuildConfig.HEART_RATE_NOTIFY) {
-            setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, true);
-        }
-        OpenHeartRateData data = new OpenHeartRateData();
-        return OpenRateDataResult.parser(write(data.toValue()));
-    }
-
-    public boolean isHeartRateStart() {
-        return heartRateStart;
-    }
-
-    /**
-     * 打开心率测试
-     */
-    public void openHeartRateAsync(boolean single) {
-        Lg.i(TAG, "open heart rate async start");
-        if (BuildConfig.HEART_RATE_NOTIFY) {
-            EXECUTOR_SERVICE_SINGLE.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        heartRateStart = true;
-                        openHeartRate();
-                        closeHeartRateAsync(30 * 1000);
-                    } catch (Exception e) {
-                        heartRateStart = false;
-                        mCallbacks.onGetHeartRateFailed();
-                    }
-                }
-            });
-        } else {
-            heartRateStart = true;
-            HeartRateTask heartRateTask = new HeartRateTask(single);
-            heartRateTask.executeOnExecutor(EXECUTOR_SERVICE_POOL);
-        }
-    }
-
-    private class HeartRateTask extends AsyncTask<Void, Void, Void> {
-
-        private boolean single;
-
-        private HeartRateTask(boolean single) {
-            this.single = single;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                OpenRateDataResult result = openHeartRate();
-                if (result == null) {
-                    mCallbacks.onGetHeartRateFailed();
-                    return null;
-                }
-                if (heartRateStart && single) {
-                    closeHeartRateAsync(30 * 1000);
-                }
-                PedometerDataResult r;
-                while (heartRateStart) {
-                    synchronized (mLock) {
-                        checkThread();
-                        checkConnectionState();
-                        mBleConnection.write(mDataCharacteristic, new PedometerData().toValue());
-                        if (heartRateStart) {
-                            r = PedometerDataResult.parser(mBleConnection.read(mDataCharacteristic));
-                        } else {
-                            r = null;
-                        }
-                    }
-                    if (heartRateStart && r != null) {
-                        mCallbacks.onGetHeartRateSuccess(r.getHeartRate());
-                    }
-                    if (heartRateStart) {
-                        SystemClock.sleep(2000);
-                    }
-                }
-                Lg.i(TAG, "heart rate finish");
-            } catch (Exception e) {
-                Lg.w(TAG, "failed to heart rate", e);
-                mCallbacks.onGetHeartRateFailed();
-            }
-            return null;
-        }
-    }
-
-    private void closeHeartRate() throws InterruptedException {
-        try {
-            Lg.i(TAG, "close heart rate start");
-            checkConnectionState();
-            if (BuildConfig.HEART_RATE_NOTIFY) {
-                setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
-            }
-            write2(new CloseHeartRateData().toValue());
-        } finally {
-            mCallbacks.onCloseHeartRate();
-        }
-    }
-
-    public void closeHeartRateAsync(long delayMillis) {
-        mHandler.removeCallbacks(mCloseHeartRateRunnable);
-        mHandler.postDelayed(mCloseHeartRateRunnable, delayMillis);
-    }
-
-    /**
-     * 关闭心率测试
-     */
-    public void closeHeartRateAsync() {
-        Lg.i(TAG, "close heart rate aysnc start");
-        mHandler.removeCallbacks(mCloseHeartRateRunnable);
-        EXECUTOR_SERVICE_SINGLE.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    heartRateStart = false;
-                    closeHeartRate();
-                } catch (Exception e) {
-                    Lg.w(TAG, "failed to close heart rate", e);
-                }
-            }
-        });
-    }
-
     public void bindDeviceAsync(String userId, final String address) {
         HttpController.getInstance().bindDeviceAsync(userId, address, new AsyncHttpResponseHandler() {
             @Override
@@ -1221,8 +1112,6 @@ public class BleController {
         if (state == HistoryController.STATE_START || state == HistoryController.STATE_FETCHING) {
             mCallbacks.onFetchHistoryFailed(BleError.SYSTEM);
         }
-        heartRateStart = false;
-        mHandler.removeCallbacks(mCloseHeartRateRunnable);
     }
 
     public void fetchDataAsync() {

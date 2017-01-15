@@ -23,6 +23,7 @@ import com.canice.wristbandapp.activity.fragment.RangeFragment;
 import com.canice.wristbandapp.activity.fragment.SleepFragment;
 import com.canice.wristbandapp.activity.fragment.SportFragment;
 import com.canice.wristbandapp.ble.BleController;
+import com.canice.wristbandapp.ble.HeartRateHelper;
 import com.canice.wristbandapp.ble.db.BleDao;
 import com.canice.wristbandapp.util.Constants;
 import com.canice.wristbandapp.widget.BottomPaneView;
@@ -213,17 +214,17 @@ public class MainActivity extends BaseActivity implements TabListener {
             this.setTitle(R.string.heartbeat_title);
             this.setRightBtnVisibility(View.GONE);
             TextView rightTextView = getRightTitle();
-            if (rightTextView.getText().equals(getString(R.string.heartbeat_start))
-                    || rightTextView.getText().equals(getString(R.string.heartbeat_stop))) {
-
+            int state = BleController.getInstance().getHeartRateHelper().getState();
+            if (state == HeartRateHelper.STATE_START) {
+                setRightBtnText(R.string.heartbeat_stop);
+            } else if (state == HeartRateHelper.STATE_STOP) {
+                setRightBtnText(R.string.heartbeat_start);
             } else {
-                this.setRightBtnText(R.string.heartbeat_start);
+                setRightBtnText(R.string.heartbeat_pre_stop);
             }
-
             this.setRightBtnTextVisible(View.VISIBLE);
             HeartBeatFragment heart = (HeartBeatFragment) heartBeatTab.getCurrentFragment();
             heart.setRightTitle(getRightTitle());
-
         } else if (tab == sportTab) {
             this.setLeftBtnVisibility(View.GONE);
             if (BuildConfig.newFit) {
@@ -245,8 +246,8 @@ public class MainActivity extends BaseActivity implements TabListener {
         }
         if (tab != heartBeatTab) {
             HeartBeatFragment heart = (HeartBeatFragment) heartBeatTab.getCurrentFragment();
-            if (heart != null && BleController.getInstance().isHeartRateStart()) {
-                heart.closeHeart();
+            if (heart != null && BleController.getInstance().getHeartRateHelper().isStart()) {
+                BleController.getInstance().getHeartRateHelper().closeHeartRateAsync(0);
             }
         }
     }
@@ -283,16 +284,9 @@ public class MainActivity extends BaseActivity implements TabListener {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
         Log.i(TAG, "onDestroy");
     }
-
 }

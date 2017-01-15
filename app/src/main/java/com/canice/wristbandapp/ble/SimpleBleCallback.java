@@ -2,7 +2,6 @@ package com.canice.wristbandapp.ble;
 
 import android.bluetooth.BluetoothDevice;
 
-import com.canice.wristbandapp.ble.data.HeartRateDataResult;
 import com.canice.wristbandapp.ble.data.HistoryResult;
 import com.canice.wristbandapp.ble.data.PedometerDataResult;
 import com.canice.wristbandapp.ble.data.VersionInfoResult;
@@ -83,9 +82,8 @@ public class SimpleBleCallback implements BleCallback {
     public void onGetHeartRateFailed() {
     }
 
-
     @Override
-    public void onCloseHeartRate() {
+    public void onCloseHeartRateFinish() {
     }
 
     @Override
@@ -102,5 +100,13 @@ public class SimpleBleCallback implements BleCallback {
 
     @Override
     public void onRefreshGoal() {
+    }
+
+    @Override
+    public void onGetHeartRateStart() {
+    }
+
+    @Override
+    public void onCloseHeartRateStart() {
     }
 }

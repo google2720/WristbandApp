@@ -59,6 +59,7 @@
     <string name="heartbeat_prompt">"运动心跳加快属正常现象，请不要担心 。心跳信息仅供参考。"</string>
     <string name="heartbeat_testing">"测定心率中..."</string>
     <string name="heartbeat_stop">结束</string>
+    <string name="heartbeat_pre_stop">正在结束</string>
 
     <!-- 运动界面 -->
     <string name="sport_goal">"目标 <xillf>%s</xillf>"</string>

@@ -1,8 +1,9 @@
 package com.canice.wristbandapp.ble;
 
 import android.bluetooth.BluetoothDevice;
+import android.os.Handler;
+import android.os.Looper;
 
-import com.canice.wristbandapp.ble.data.HeartRateDataResult;
 import com.canice.wristbandapp.ble.data.HistoryResult;
 import com.canice.wristbandapp.ble.data.PedometerDataResult;
 import com.canice.wristbandapp.ble.data.VersionInfoResult;
@@ -12,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class GroupBleCallback implements BleCallback {
 
     private CopyOnWriteArraySet<BleCallback> listeners = new CopyOnWriteArraySet<>();
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public synchronized void addListener(BleCallback listener) {
         listeners.add(listener);
@@ -26,10 +28,15 @@ public class GroupBleCallback implements BleCallback {
     }
 
     @Override
-    public void onGattDisconnected(BluetoothDevice device) {
-        for (BleCallback l : listeners) {
-            l.onGattDisconnected(device);
-        }
+    public void onGattDisconnected(final BluetoothDevice device) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onGattDisconnected(device);
+                }
+            }
+        });
     }
 
     @Override
@@ -129,26 +136,6 @@ public class GroupBleCallback implements BleCallback {
             l.onFetchHistoryStart();
         }
     }
-    @Override
-    public void onGetHeartRateSuccess(int value) {
-        for (BleCallback l : listeners) {
-            l.onGetHeartRateSuccess(value);
-        }
-    }
-
-    @Override
-    public void onGetHeartRateFailed() {
-        for (BleCallback l : listeners) {
-            l.onGetHeartRateFailed();
-        }
-    }
-
-    @Override
-    public void onCloseHeartRate() {
-        for (BleCallback l : listeners) {
-            l.onCloseHeartRate();
-        }
-    }
 
     public void onSosNotify(byte[] data) {
         for (BleCallback l : listeners) {
@@ -170,15 +157,85 @@ public class GroupBleCallback implements BleCallback {
 
     @Override
     public void onBluetoothOff() {
-        for (BleCallback l : listeners) {
-            l.onBluetoothOff();
-        }
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onBluetoothOff();
+                }
+            }
+        });
     }
 
     @Override
     public void onRefreshGoal() {
-        for (BleCallback l : listeners) {
-            l.onRefreshGoal();
-        }
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onRefreshGoal();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onGetHeartRateStart() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onGetHeartRateStart();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onGetHeartRateSuccess(final int value) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onGetHeartRateSuccess(value);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onGetHeartRateFailed() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onGetHeartRateFailed();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCloseHeartRateStart() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onCloseHeartRateStart();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCloseHeartRateFinish() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onCloseHeartRateFinish();
+                }
+            }
+        });
     }
 }
