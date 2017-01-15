@@ -80,6 +80,8 @@ public class HeartBeatFragment extends BaseFragment {
                     helper.closeHeartRateAsync(0);
                 } else if (state == HeartRateHelper.STATE_STOP) {
                     helper.openHeartRateAsync(singleView.isChecked());
+                } else {
+                    HintUtils.showShortToast(getActivity(), getString(R.string.heartbeat_pre_stop));
                 }
             }
         });

@@ -216,11 +216,11 @@ public class MainActivity extends BaseActivity implements TabListener {
             TextView rightTextView = getRightTitle();
             int state = BleController.getInstance().getHeartRateHelper().getState();
             if (state == HeartRateHelper.STATE_START) {
-                setRightBtnText(R.string.heartbeat_stop);
+                rightTextView.setText(R.string.heartbeat_stop);
             } else if (state == HeartRateHelper.STATE_STOP) {
-                setRightBtnText(R.string.heartbeat_start);
+                rightTextView.setText(R.string.heartbeat_start);
             } else {
-                setRightBtnText(R.string.heartbeat_pre_stop);
+                rightTextView.setText(R.string.heartbeat_pre_stop);
             }
             this.setRightBtnTextVisible(View.VISIBLE);
             HeartBeatFragment heart = (HeartBeatFragment) heartBeatTab.getCurrentFragment();
