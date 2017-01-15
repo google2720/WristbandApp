@@ -24,7 +24,7 @@ public class HeartRateHelper {
     public static final int STATE_START = 2;
     public static final int STATE_PRE_STOP = 3;
     public static final int STATE_STOP = 4;
-    private int state = STATE_STOP;
+    private volatile int state = STATE_STOP;
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable closeHeartRateRunnable = new Runnable() {
         @Override
@@ -92,6 +92,7 @@ public class HeartRateHelper {
                 Lg.w(TAG, "failed to close heart rate", e);
             }
             state = STATE_STOP;
+            ble.getCallbacks().onCloseHeartRateFinish();
             Lg.i(TAG, "close heart rate finish");
             return null;
         }
@@ -123,9 +124,9 @@ public class HeartRateHelper {
                     synchronized (ble.getLock()) {
                         ble.checkThread();
                         ble.checkConnectionState();
-                        ble.write(new PedometerData().toValue());
+                        ble.writeInner(new PedometerData().toValue());
                         if (isStart()) {
-                            r = PedometerDataResult.parser(ble.read());
+                            r = PedometerDataResult.parser(ble.readInner());
                         } else {
                             r = null;
                         }

@@ -376,6 +376,14 @@ public class BleController {
         }
     }
 
+    void writeInner(byte[] data) throws InterruptedException {
+        mBleConnection.write(mDataCharacteristic, data);
+    }
+
+    byte[] readInner() throws InterruptedException {
+        return mBleConnection.read(mDataCharacteristic);
+    }
+
     byte[] read() throws InterruptedException {
         return read(mDataCharacteristic);
     }
