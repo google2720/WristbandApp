@@ -228,11 +228,15 @@ public class BleConnection {
     }
 
     private void connectFailed(boolean disconnect) {
-        if (mBluetoothGatt != null) {
-            if (disconnect) {
-                mBluetoothGatt.disconnect();
+        try {
+            if (mBluetoothGatt != null) {
+                if (disconnect) {
+                    mBluetoothGatt.disconnect();
+                }
+                mBluetoothGatt.close();
             }
-            mBluetoothGatt.close();
+        } catch (Exception e) {
+            Lg.w(TAG, "failed to close gatt device", e);
         }
         setState(STATE_NONE);
     }

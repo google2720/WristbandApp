@@ -54,6 +54,9 @@ public class HeartBeatFragment extends BaseFragment {
         @Override
         public void onCloseHeartRateStart() {
             Log.i(TAG, "onCloseHeartRateStart");
+            if (getActivity() == null) {
+                return;
+            }
             if (animView != null) {
                 animView.clearAnimation();
             }
