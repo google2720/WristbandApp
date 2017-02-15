@@ -39,7 +39,7 @@ public class APP extends Application {
         super.onCreate();
         Lg.setLg(new AndroidLgImpl(this));
         Lg.setLevel(BuildConfig.LOG_LEVEL);
-        Lg.i(TAG, this + " onCreate " + BuildConfig.VERSION_NAME + " " + BuildConfig.VERSION_CODE + " " + Build.FINGERPRINT);
+        Lg.i(TAG, this + " onCreate " + BuildConfig.VERSION_NAME + " " + BuildConfig.VERSION_CODE + " " + Build.BRAND + " " + Build.MODEL + " " + Build.VERSION.RELEASE);
         String curProcessName = getCurProcessName(this);
         String processName = getApplicationInfo().processName;
         Lg.i(TAG, "curProcessName:" + curProcessName + ", processName:" + processName);
