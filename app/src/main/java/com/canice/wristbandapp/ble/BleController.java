@@ -146,6 +146,7 @@ public class BleController {
 
     public void initialize(Context context) {
         if (mInitialize) {
+            Lg.w(TAG, "The Bluetooth controller is initialized.");
             return;
         }
         mInitialize = true;

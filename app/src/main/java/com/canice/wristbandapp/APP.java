@@ -1,8 +1,10 @@
 package com.canice.wristbandapp;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 
 import com.canice.wristbandapp.ble.BleController;
 import com.canice.wristbandapp.ble.BleService;
@@ -18,7 +20,7 @@ import com.github.yzeaho.log.Lg;
  */
 public class APP extends Application {
 
-    private static final String TAG = "BcdActivity";
+    private static final String TAG = "APP";
     private static APP mInstance;
     public static AsyncHttpClient client = null;
     private static CustomProgressDialog mProgressDialog;
@@ -33,14 +35,20 @@ public class APP extends Application {
     @Override
     public void onCreate() {
         mInstance = this;
+        client = new AsyncHttpClient();
         super.onCreate();
         Lg.setLg(new AndroidLgImpl(this));
         Lg.setLevel(BuildConfig.LOG_LEVEL);
-        Lg.i(TAG, this + " onCreate " + BuildConfig.VERSION_NAME + " " + BuildConfig.VERSION_CODE);
-        registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
-        client = new AsyncHttpClient();
-        BleController.getInstance().initialize(this);
-        BleService.actionStart(this);
+        Lg.i(TAG, this + " onCreate " + BuildConfig.VERSION_NAME + " " + BuildConfig.VERSION_CODE + " " + Build.FINGERPRINT);
+        String curProcessName = getCurProcessName(this);
+        String processName = getApplicationInfo().processName;
+        Lg.i(TAG, "curProcessName:" + curProcessName + ", processName:" + processName);
+        // 主进程才初始化界面相关的数据
+        if (processName.equals(curProcessName)) {
+            registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
+            BleController.getInstance().initialize(this);
+            BleService.actionStart(this);
+        }
     }
 
     public static Dialog getDialog(Context context) {
@@ -49,5 +57,19 @@ public class APP extends Application {
         mProgressDialog.setCancelable(true);
         mProgressDialog.setCanceledOnTouchOutside(false);
         return mProgressDialog;
+    }
+
+    /**
+     * 获取当前进程的进程名字
+     */
+    private String getCurProcessName(Context context) {
+        int pid = android.os.Process.myPid();
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
+            if (p.pid == pid) {
+                return p.processName;
+            }
+        }
+        return null;
     }
 }

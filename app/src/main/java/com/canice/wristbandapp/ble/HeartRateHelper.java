@@ -115,7 +115,7 @@ public class HeartRateHelper {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Lg.i(TAG, " open heart rate start");
+                Lg.i(TAG, "open heart rate start");
                 OpenRateDataResult result = OpenRateDataResult.parser(ble.write(new OpenHeartRateData().toValue()));
                 if (result == null) {
                     ble.getCallbacks().onGetHeartRateFailed();

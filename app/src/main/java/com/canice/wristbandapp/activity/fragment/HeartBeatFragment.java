@@ -48,7 +48,7 @@ public class HeartBeatFragment extends BaseFragment {
         @Override
         public void onGetHeartRateFailed() {
             Log.i(TAG, "onGetHeartRateFailed");
-            stopAnim();
+            helper.closeHeartRateAsync(0);
         }
 
         @Override
