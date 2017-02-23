@@ -83,6 +83,7 @@ public class BleController {
     private Context mContext;
     private static final Object mLock = new Object();
     final ExecutorService EXECUTOR_SERVICE_SINGLE = Executors.newSingleThreadExecutor();
+    final ExecutorService EXECUTOR_SERVICE_RECEIVER = Executors.newSingleThreadExecutor();
     final Executor EXECUTOR_SERVICE_POOL = AsyncTask.THREAD_POOL_EXECUTOR;
     private BluetoothAdapter mBleAdapter;
     private BleConnection mBleConnection;
@@ -95,7 +96,7 @@ public class BleController {
         public void onReceive(final Context context, final Intent intent) {
             final String action = intent.getAction();
             Lg.i(TAG, "onReceive " + action);
-            EXECUTOR_SERVICE_POOL.execute(new Runnable() {
+            EXECUTOR_SERVICE_RECEIVER.execute(new Runnable() {
                 @Override
                 public void run() {
                     doReceiver(context, intent, action);
@@ -188,12 +189,17 @@ public class BleController {
             disconnectInner();
             mCallbacks.onGattDisconnected(mBleConnection.getDevice());
         } else if (BleConnection.ACTION_GATT_RSSI.equals(action)) {
-            int rssi = intent.getIntExtra(BleConnection.EXTRA_DATA, 0);
-            int newRssi = mRssiHelper.add(rssi);
+            final int rssi = intent.getIntExtra(BleConnection.EXTRA_DATA, 0);
+            final int newRssi = mRssiHelper.add(rssi);
             Lg.i(TAG, "onRemoteRssi newRssi:" + newRssi);
-            if (newRssi != RssiHelper.NO_RSSI) {
-                mCallbacks.onRemoteRssi(mBleConnection.getDevice(), newRssi);
-            }
+            EXECUTOR_SERVICE_POOL.execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (newRssi != RssiHelper.NO_RSSI) {
+                        mCallbacks.onRemoteRssi(mBleConnection.getDevice(), newRssi);
+                    }
+                }
+            });
         } else if (BleConnection.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
             mDefaultGattService = mBleConnection.getService(UUID_DATA_SERVICE);
             if (mDefaultGattService == null) {
@@ -222,28 +228,43 @@ public class BleController {
             mCallbacks.onGattServicesDiscovered(mBleConnection.getDevice());
         } else if (BleConnection.ACTION_DATA_AVAILABLE.equals(action)) {
             String uuid = intent.getStringExtra(BleConnection.EXTRA_UUID);
-            byte[] data = intent.getByteArrayExtra(BleConnection.EXTRA_DATA);
+            final byte[] data = intent.getByteArrayExtra(BleConnection.EXTRA_DATA);
             if (data != null && data.length > 0) {
                 if (UUID_SOS_CHARACTERISTIC.toString().equals(uuid)) {
-                    mCallbacks.onSosNotify(data);
+                    EXECUTOR_SERVICE_POOL.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallbacks.onSosNotify(data);
+                        }
+                    });
                 } else {
-                    Data d = NotifyDataHelper.parser(data);
+                    final Data d = NotifyDataHelper.parser(data);
                     if (d == null) {
                         Lg.i(TAG, "no support notify data?");
                     } else if (d instanceof HeartRateDataResult) {
-                        mCallbacks.onGetHeartRateSuccess(((HeartRateDataResult) d).getHeartRate());
+                        EXECUTOR_SERVICE_POOL.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                mCallbacks.onGetHeartRateSuccess(((HeartRateDataResult) d).getHeartRate());
+                            }
+                        });
                     } else if (d instanceof HistoryResult) {
-                        HistoryResult r = (HistoryResult) d;
-                        if (r.isFinish()) {
-                            // 同步72小时数据成功之后关闭通知
-                            setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
-                            mCallbacks.onFetchHistorySuccess();
-                            mHandler.removeCallbacks(mHistoryTimeOutRunnable);
-                        } else {
-                            mCallbacks.onFetchHistory(getBindedDeviceAddress(), r);
-                            mHandler.removeCallbacks(mHistoryTimeOutRunnable);
-                            mHandler.postDelayed(mHistoryTimeOutRunnable, 10000);
-                        }
+                        BackgroundHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                HistoryResult r = (HistoryResult) d;
+                                if (r.isFinish()) {
+                                    // 同步72小时数据成功之后关闭通知
+                                    setCharacteristicNotification(mDataCharacteristic, mDataDescriptor, false);
+                                    mCallbacks.onFetchHistorySuccess();
+                                    mHandler.removeCallbacks(mHistoryTimeOutRunnable);
+                                } else {
+                                    mCallbacks.onFetchHistory(getBindedDeviceAddress(), r);
+                                    mHandler.removeCallbacks(mHistoryTimeOutRunnable);
+                                    mHandler.postDelayed(mHistoryTimeOutRunnable, 10000);
+                                }
+                            }
+                        });
                     }
                 }
             }
