@@ -192,6 +192,18 @@ public class GroupBleCallback implements BleCallback {
     }
 
     @Override
+    public void onGetBloodPressStart() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onGetBloodPressStart();
+                }
+            }
+        });
+    }
+
+    @Override
     public void onGetHeartRateSuccess(final int value) {
         handler.post(new Runnable() {
             @Override
@@ -216,6 +228,30 @@ public class GroupBleCallback implements BleCallback {
     }
 
     @Override
+    public void onGetBloodPressSuccess(final int sbp, final int dbp) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onGetBloodPressSuccess(sbp,dbp);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onGetBloodPressFailed() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onGetBloodPressFailed();
+                }
+            }
+        });
+    }
+
+    @Override
     public void onCloseHeartRateStart() {
         handler.post(new Runnable() {
             @Override
@@ -228,12 +264,36 @@ public class GroupBleCallback implements BleCallback {
     }
 
     @Override
+    public void onCloseBloodPressStart() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onCloseBloodPressStart();
+                }
+            }
+        });
+    }
+
+    @Override
     public void onCloseHeartRateFinish() {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 for (BleCallback l : listeners) {
                     l.onCloseHeartRateFinish();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCloseBloodPressFinish() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BleCallback l : listeners) {
+                    l.onCloseBloodPressFinish();
                 }
             }
         });

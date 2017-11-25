@@ -79,11 +79,26 @@ public class SimpleBleCallback implements BleCallback {
     }
 
     @Override
+    public void onGetBloodPressSuccess(int sbp, int dpb) {
+
+    }
+
+    @Override
     public void onGetHeartRateFailed() {
     }
 
     @Override
+    public void onGetBloodPressFailed() {
+
+    }
+
+    @Override
     public void onCloseHeartRateFinish() {
+    }
+
+    @Override
+    public void onCloseBloodPressFinish() {
+
     }
 
     @Override
@@ -107,6 +122,16 @@ public class SimpleBleCallback implements BleCallback {
     }
 
     @Override
+    public void onGetBloodPressStart() {
+
+    }
+
+    @Override
     public void onCloseHeartRateStart() {
+    }
+
+    @Override
+    public void onCloseBloodPressStart() {
+
     }
 }

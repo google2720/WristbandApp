@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.canice.wristbandapp.R;
 import com.canice.wristbandapp.ble.BleCallback;
 import com.canice.wristbandapp.ble.BleController;
+import com.canice.wristbandapp.ble.BloodPressHelper;
 import com.canice.wristbandapp.ble.HeartRateHelper;
 import com.canice.wristbandapp.ble.SimpleBleCallback;
 import com.canice.wristbandapp.util.HintUtils;
@@ -26,7 +27,9 @@ public class HeartBeatFragment extends BaseFragment {
 
     private BleController ble = BleController.getInstance();
     private HeartRateHelper helper = ble.getHeartRateHelper();
+    private BloodPressHelper bloodPresshelper = ble.getBloodPressHelper();
     private TextView heartbeatView;
+    private TextView bloodPressureView;
     private Switch singleView;
     private TextView rightTitle;
     private ImageView animView;
@@ -43,6 +46,7 @@ public class HeartBeatFragment extends BaseFragment {
         public void onGetHeartRateSuccess(final int value) {
             Log.i(TAG, "onGetHeartRateSuccess " + value);
             heartbeatView.setText(String.valueOf(value));
+
         }
 
         @Override
@@ -70,6 +74,33 @@ public class HeartBeatFragment extends BaseFragment {
             Log.i(TAG, "onCloseHeartRateFinish");
             stopAnim();
         }
+
+
+
+        @Override
+        public void onGetBloodPressSuccess(int sbp, int dbp) {
+            bloodPressureView.setText(String.valueOf(sbp)+" / "+String.valueOf(dbp));
+        }
+
+        @Override
+        public void onGetBloodPressFailed() {
+
+        }
+
+        @Override
+        public void onGetBloodPressStart() {
+
+        }
+
+        @Override
+        public void onCloseBloodPressStart() {
+
+        }
+
+        @Override
+        public void onCloseBloodPressFinish() {
+
+        }
     };
 
     public void setRightTitle(TextView tv) {
@@ -82,15 +113,43 @@ public class HeartBeatFragment extends BaseFragment {
                     return;
                 }
                 int state = helper.getState();
-                if (state == HeartRateHelper.STATE_START) {
-                    helper.closeHeartRateAsync(0);
-                } else if (state == HeartRateHelper.STATE_STOP) {
-                    helper.openHeartRateAsync(singleView.isChecked());
-                } else {
-                    HintUtils.showShortToast(getActivity(), getString(R.string.heartbeat_pre_stop));
+                int bloodState = bloodPresshelper.getState();
+                if(bloodState!=BloodPressHelper.STATE_STOP) {
+                    if (state == HeartRateHelper.STATE_START) {
+                        helper.closeHeartRateAsync(0);
+                    } else if (state == HeartRateHelper.STATE_STOP) {
+                        helper.openHeartRateAsync(singleView.isChecked());
+                    } else {
+                        HintUtils.showShortToast(getActivity(), getString(R.string.heartbeat_pre_stop));
+                    }
+                }else {
+                    HintUtils.showShortToast(getActivity(), getString(R.string.heart_rate_test_not_available_tip));
                 }
+
             }
         });
+    }
+
+    public void startBloodTest(View v){
+        if (!ble.isDeviceReady()) {
+            HintUtils.showShortToast(getActivity(), getString(R.string.bind_faild));
+            return;
+        }
+
+        int state = bloodPresshelper.getState();
+        int heartState = helper.getState();
+        if(heartState!=HeartRateHelper.STATE_STOP){
+            if (state == BloodPressHelper.STATE_START) {
+                bloodPresshelper.closeBloodPressAsync(0);
+            } else if (state == BloodPressHelper.STATE_STOP) {
+                bloodPresshelper.openBloodPressAsync(true);
+            } else {
+                HintUtils.showShortToast(getActivity(), getString(R.string.heartbeat_pre_stop));
+            }
+        }else {
+            HintUtils.showShortToast(getActivity(), getString(R.string.blood_pressure_test_not_available_tip));
+        }
+
     }
 
     @Override
@@ -108,6 +167,7 @@ public class HeartBeatFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.layout_heartbeat, container, false);
         heartbeatView = (TextView) root.findViewById(R.id.tv_heartbeat);
+        bloodPressureView = (TextView) root.findViewById(R.id.blood_pressure);
         animView = (ImageView) root.findViewById(R.id.iv_anim);
         singleView = (Switch) root.findViewById(R.id.single);
         singleView.setChecked(true);

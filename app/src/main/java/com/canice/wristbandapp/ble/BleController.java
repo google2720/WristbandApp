@@ -134,11 +134,13 @@ public class BleController {
         }
     };
     private HeartRateHelper heartRateHelper;
+    private BloodPressHelper bloodPressHelper;
 
     private BleController() {
         mCallbacks = new GroupBleCallback();
         historyController = new HistoryController(this);
         heartRateHelper = new HeartRateHelper(this);
+        bloodPressHelper = new BloodPressHelper(this);
     }
 
     public static BleController getInstance() {
@@ -178,6 +180,10 @@ public class BleController {
     @NonNull
     public HeartRateHelper getHeartRateHelper() {
         return heartRateHelper;
+    }
+    @NonNull
+    public BloodPressHelper getBloodPressHelper() {
+        return bloodPressHelper;
     }
 
     private void doReceiver(Context context, Intent intent, String action) {

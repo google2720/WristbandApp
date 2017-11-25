@@ -55,9 +55,19 @@ public class PedometerDataResult extends Data {
         return data[10] & 0xff;
     }
 
+    public int getSBPData() {
+        return data[11] & 0xff;
+    }
+
+    public int getDBPData() {
+        return data[12] & 0xff;
+    }
+
     @Override
     public String toString() {
         return "PedometerDataResult [getStep=" + getStep() + ", getDistance=" + getDistance() + ", getCal="
-                + getCal() + ", getGol=" + getGol() + ", getBattery=" + getBattery() + ",getHeartRate=" + getHeartRate() + "]";
+                + getCal() + ", getGol=" + getGol() + ", getBattery=" + getBattery() + ",getHeartRate=" + getHeartRate() +
+                ",getSBPData=" + getSBPData() +",getDBPData=" + getDBPData() +
+                "]";
     }
 }

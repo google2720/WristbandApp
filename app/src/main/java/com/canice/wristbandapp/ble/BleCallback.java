@@ -2,7 +2,6 @@ package com.canice.wristbandapp.ble;
 
 import android.bluetooth.BluetoothDevice;
 
-import com.canice.wristbandapp.ble.data.HeartRateDataResult;
 import com.canice.wristbandapp.ble.data.HistoryResult;
 import com.canice.wristbandapp.ble.data.PedometerDataResult;
 import com.canice.wristbandapp.ble.data.VersionInfoResult;
@@ -51,11 +50,21 @@ public interface BleCallback {
 
     void onGetHeartRateStart();
 
+    void onGetBloodPressStart();
+
     void onGetHeartRateSuccess(int value);
+
+    void onGetBloodPressSuccess(int sbp ,int dpb);
 
     void onGetHeartRateFailed();
 
+    void onGetBloodPressFailed();
+
     void onCloseHeartRateStart();
 
+    void onCloseBloodPressStart();
+
     void onCloseHeartRateFinish();
+
+    void onCloseBloodPressFinish();
 }
