@@ -21,6 +21,6 @@ public class OpenBloodPressResult extends Data {
     }
 
     private boolean check() {
-        return data.length == 20 && data[0] == (byte) 0xAA && data[1] == (byte) 0x00 && data[2] == (byte) 0x00 && data[18] == (byte) 0x03;
+        return data.length == 20 && data[0] == (byte) 0xAA && data[1] == (byte) 0xE0 && data[2] == (byte) 0xEE && data[18] == (byte) 0x03;
     }
 }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,13 +27,15 @@ import com.canice.wristbandapp.util.HintUtils;
 public class HeartBeatFragment extends BaseFragment {
 
     private BleController ble = BleController.getInstance();
-    private HeartRateHelper helper = ble.getHeartRateHelper();
+    private HeartRateHelper heartRatehelper = ble.getHeartRateHelper();
     private BloodPressHelper bloodPresshelper = ble.getBloodPressHelper();
     private TextView heartbeatView;
     private TextView bloodPressureView;
     private Switch singleView;
     private TextView rightTitle;
     private ImageView animView;
+    private Button bloodBtnView;
+    private TextView bloodTestState;
     private AnimationSet animationSet = new AnimationSet(true);
     private BleCallback cb = new SimpleBleCallback() {
 
@@ -52,7 +55,7 @@ public class HeartBeatFragment extends BaseFragment {
         @Override
         public void onGetHeartRateFailed() {
             Log.i(TAG, "onGetHeartRateFailed");
-            helper.closeHeartRateAsync(0);
+            heartRatehelper.closeHeartRateAsync(0);
         }
 
         @Override
@@ -78,30 +81,68 @@ public class HeartBeatFragment extends BaseFragment {
 
 
         @Override
-        public void onGetBloodPressSuccess(int sbp, int dbp) {
-            bloodPressureView.setText(String.valueOf(sbp)+" / "+String.valueOf(dbp));
-        }
-
-        @Override
-        public void onGetBloodPressFailed() {
-
-        }
-
-        @Override
         public void onGetBloodPressStart() {
-
+            if (getActivity() == null) {
+                return;
+            }
+            bloodTestState.setText(getString(R.string.blood_pressure_test_ing));
+            bloodBtnView.setText(getString(R.string.blood_stop));
+            bloodPressureView.setText("0/0");
         }
 
         @Override
         public void onCloseBloodPressStart() {
-
+            if (getActivity() == null) {
+                return;
+            }
+            bloodTestState.setText(getString(R.string.blood_start_stop_ing));
         }
 
         @Override
-        public void onCloseBloodPressFinish() {
-
+        public void onGetBloodPressFailed() {
+            bloodPresshelper.closeBloodPressAsync(0);
         }
+
+
+        @Override
+        public void onCloseBloodPressFinish() {
+            if (getActivity() == null) {
+                return;
+            }
+            bloodTestState.setText(getString(R.string.blood_pressure_test));
+            bloodBtnView.setText(getString(R.string.blood_start));
+        }
+
+        @Override
+        public void onGetBloodPressSuccess(int sbp, int dbp) {
+            bloodPressureView.setText(String.valueOf(sbp)+"/"+String.valueOf(dbp));
+        }
+
     };
+
+    public void startBloodTest(){
+        if (!ble.isDeviceReady()) {
+            HintUtils.showShortToast(getActivity(), getString(R.string.bind_faild));
+            return;
+        }
+
+        int bloodPressState = bloodPresshelper.getState();
+        int heartState = heartRatehelper.getState();
+        if(heartState==HeartRateHelper.STATE_STOP){
+
+            if (bloodPressState == BloodPressHelper.STATE_START) {
+                bloodPresshelper.closeBloodPressAsync(0);
+            } else if (bloodPressState == BloodPressHelper.STATE_STOP) {
+                bloodPresshelper.openBloodPressAsync(true);
+            } else {
+                HintUtils.showShortToast(getActivity(), getString(R.string.blood_pressure_pre_stop));
+            }
+
+        }else {
+            HintUtils.showShortToast(getActivity(), getString(R.string.blood_pressure_test_not_available_tip));
+        }
+
+    }
 
     public void setRightTitle(TextView tv) {
         this.rightTitle = tv;
@@ -112,16 +153,18 @@ public class HeartBeatFragment extends BaseFragment {
                     HintUtils.showShortToast(getActivity(), getString(R.string.bind_faild));
                     return;
                 }
-                int state = helper.getState();
+                int heartRateState = heartRatehelper.getState();
                 int bloodState = bloodPresshelper.getState();
-                if(bloodState!=BloodPressHelper.STATE_STOP) {
-                    if (state == HeartRateHelper.STATE_START) {
-                        helper.closeHeartRateAsync(0);
-                    } else if (state == HeartRateHelper.STATE_STOP) {
-                        helper.openHeartRateAsync(singleView.isChecked());
+                if(bloodState==BloodPressHelper.STATE_STOP) {
+
+                    if (heartRateState == HeartRateHelper.STATE_START) {
+                        heartRatehelper.closeHeartRateAsync(0);
+                    } else if (heartRateState == HeartRateHelper.STATE_STOP) {
+                        heartRatehelper.openHeartRateAsync(singleView.isChecked());
                     } else {
                         HintUtils.showShortToast(getActivity(), getString(R.string.heartbeat_pre_stop));
                     }
+
                 }else {
                     HintUtils.showShortToast(getActivity(), getString(R.string.heart_rate_test_not_available_tip));
                 }
@@ -130,27 +173,7 @@ public class HeartBeatFragment extends BaseFragment {
         });
     }
 
-    public void startBloodTest(View v){
-        if (!ble.isDeviceReady()) {
-            HintUtils.showShortToast(getActivity(), getString(R.string.bind_faild));
-            return;
-        }
 
-        int state = bloodPresshelper.getState();
-        int heartState = helper.getState();
-        if(heartState!=HeartRateHelper.STATE_STOP){
-            if (state == BloodPressHelper.STATE_START) {
-                bloodPresshelper.closeBloodPressAsync(0);
-            } else if (state == BloodPressHelper.STATE_STOP) {
-                bloodPresshelper.openBloodPressAsync(true);
-            } else {
-                HintUtils.showShortToast(getActivity(), getString(R.string.heartbeat_pre_stop));
-            }
-        }else {
-            HintUtils.showShortToast(getActivity(), getString(R.string.blood_pressure_test_not_available_tip));
-        }
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,9 +191,17 @@ public class HeartBeatFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.layout_heartbeat, container, false);
         heartbeatView = (TextView) root.findViewById(R.id.tv_heartbeat);
         bloodPressureView = (TextView) root.findViewById(R.id.blood_pressure);
+        bloodBtnView = (Button)root.findViewById(R.id.blood_test);
+        bloodTestState = (TextView)root.findViewById(R.id.blood_test_des);
         animView = (ImageView) root.findViewById(R.id.iv_anim);
         singleView = (Switch) root.findViewById(R.id.single);
         singleView.setChecked(true);
+        bloodBtnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startBloodTest();
+            }
+        });
 
         ScaleAnimation a = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         a.setDuration(1000);

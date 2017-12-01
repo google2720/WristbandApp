@@ -46,8 +46,7 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def oldFile = output.outputFile
-           // def apkName = 'EasyFit-' + variant.productFlavors[0].name + '-' + variant.buildType.name + "-" + variant.versionName + '-' + getCurrentDate() + '.apk'
-            def apkName = 'EasyFit-' + variant.productFlavors[0].name + '-' + variant.buildType.name + "-" + variant.versionName +  '.apk'
+            def apkName = 'EasyFit-' + variant.productFlavors[0].name + '-' + variant.buildType.name + "-" + variant.versionName + '-' + getCurrentDate() + '.apk'
             output.outputFile = new File(oldFile.parent, apkName)
         }
     }

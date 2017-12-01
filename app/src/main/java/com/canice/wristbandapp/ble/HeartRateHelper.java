@@ -141,7 +141,7 @@ public class HeartRateHelper {
                         ble.getCallbacks().onGetHeartRateSuccess(r.getHeartRate());
                         if (first && isStart() && single) {
                             first = false;
-                            closeHeartRateAsync(10 * 1000);
+                            closeHeartRateAsync(20 * 1000);
                         }
                     }
                     if (isStart()) {

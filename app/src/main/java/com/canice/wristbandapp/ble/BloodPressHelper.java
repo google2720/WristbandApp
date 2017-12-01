@@ -116,15 +116,15 @@ public class BloodPressHelper {
         protected Void doInBackground(Void... params) {
             try {
                 Lg.i(TAG, "open blood press start");
-                OpenBloodPressResult result = OpenBloodPressResult.parser(ble.write(new OpenBloodPressData().toValue()));
+                OpenBloodPressResult result = OpenBloodPressResult.parser( ble.write(new OpenBloodPressData().toValue()));
                 if (result == null) {
                     ble.getCallbacks().onGetBloodPressFailed();
                     return null;
                 }
-                boolean first = true;
-                if (isStart() && single) {
-                    closeBloodPressAsync(30 * 1000);
-                }
+//                boolean first = true;
+//                if (isStart() && single) {
+//                    closeBloodPressAsync(30 * 1000);
+//                }
                 PedometerDataResult r;
                 while (isStart()) {
                     synchronized (ble.getLock()) {
@@ -139,9 +139,8 @@ public class BloodPressHelper {
                     }
                     if (isStart() && r != null) {
                         ble.getCallbacks().onGetBloodPressSuccess(r.getSBPData(),r.getDBPData());
-                        if (first && isStart() && single) {
-                            first = false;
-                            closeBloodPressAsync(10 * 1000);
+                        if (!isStart()) {
+                            closeBloodPressAsync(0);
                         }
                     }
                     if (isStart()) {
