@@ -57,7 +57,7 @@ android {
 
 static def getCurrentDate() {
     def date = new Date()
-    def formattedDate = date.format('yyyyMMddHHmmss')
+    def formattedDate = date.format('yyyyMMdd')
     return formattedDate
 }
 

@@ -249,6 +249,9 @@ public class MainActivity extends BaseActivity implements TabListener {
             if (heart != null && BleController.getInstance().getHeartRateHelper().isStart()) {
                 BleController.getInstance().getHeartRateHelper().closeHeartRateAsync(0);
             }
+            if (heart != null && BleController.getInstance().getBloodPressHelper().isStart()) {
+                BleController.getInstance().getBloodPressHelper().closeBloodPressAsync(0);
+            }
         }
     }
 

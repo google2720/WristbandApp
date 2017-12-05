@@ -158,35 +158,103 @@
 
 
     <RelativeLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/blood_test_des"
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_marginTop="30dp">
+
+        <RelativeLayout
+            android:id="@+id/layout_sbp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/blood_pressure_sbp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:text="0"
+                android:textColor="#525b62"
+                android:textSize="46sp"/>
 
 
-        <TextView
-            android:id="@+id/blood_pressure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_centerHorizontal="true"
-            android:text="0/0"
-            android:textColor="#525b62"
-            android:textSize="30sp"/>
+            <TextView
+                android:id="@+id/blood_sbp_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blood_sbp"
+                android:layout_marginRight="2dp"
+                android:textColor="#525b62"
+                android:layout_toLeftOf="@id/blood_pressure_sbp"
+                android:layout_alignBaseline="@id/blood_pressure_sbp"
+                android:textSize="18sp"
+            />
 
 
-        <TextView
-            android:id="@+id/blood_unit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/blood_pressure"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/blood_pressure"
-            android:text="@string/blood_kpa"
-            android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/blood_unit_sbp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/blood_pressure_sbp"
+                android:textColor="#525b62"
+                android:layout_toRightOf="@id/blood_pressure_sbp"
+                android:text="@string/blood_kpa"
+                android:textSize="18sp"/>
+
+        </RelativeLayout>
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_below="@id/layout_sbp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/blood_pressure_dbp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#525b62"
+                android:textSize="46sp"/>
+
+
+            <TextView
+                android:id="@+id/blood_dbp_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/blood_pressure_dbp"
+                android:layout_alignBaseline="@id/blood_pressure_dbp"
+                android:layout_marginRight="2dp"
+                android:text="@string/blood_dbp"
+                android:textColor="#525b62"
+                android:textSize="18sp"
+            />
+
+
+
+            <TextView
+                android:id="@+id/blood_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/blood_pressure_dbp"
+                android:textColor="#525b62"
+                android:layout_toRightOf="@id/blood_pressure_dbp"
+                android:text="@string/blood_kpa"
+                android:textSize="18sp"/>
+
+        </RelativeLayout>
+
+
+
+
+
 
 
     </RelativeLayout>

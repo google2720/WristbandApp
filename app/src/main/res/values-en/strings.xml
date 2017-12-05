@@ -56,9 +56,6 @@
     <string name="heartbeat_title">"Heart Rate"</string>
     <string name="heartbeat_start">"Start"</string>
     <string name="heartbeat_unit">"Times/Min"</string>
-    <string name="heartbeat_pressure_unit">"kpa"</string>
-    <string name="heartbeat_spb">"SPB"</string>
-    <string name="heartbeat_dpb">"DPB"</string>
     <string name="heartbeat_prompt">"Your heart rate will increase after sports. Don't worry. This is for your reference only."</string>
     <string name="heartbeat_testing">"Heart rate measuring..."</string>
     <string name="heartbeat_stop">"Stop"</string>
@@ -75,6 +72,8 @@
     <string name="blood_pressure_test_ing">"Testing..."</string>
     <string name="blood_stop">"Stop"</string>
     <string name="blood_kpa">"Kpa"</string>
+    <string name="blood_sbp">"SBP"</string>
+    <string name="blood_dbp">"DBP"</string>
 
     <!-- 运动界面 -->
     <string name="sport_goal">"Target: <xillf>%s</xillf>"</string>

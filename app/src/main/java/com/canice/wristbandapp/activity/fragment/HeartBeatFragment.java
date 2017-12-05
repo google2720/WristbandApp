@@ -30,7 +30,8 @@ public class HeartBeatFragment extends BaseFragment {
     private HeartRateHelper heartRatehelper = ble.getHeartRateHelper();
     private BloodPressHelper bloodPresshelper = ble.getBloodPressHelper();
     private TextView heartbeatView;
-    private TextView bloodPressureView;
+    private TextView bloodPressureDbp;
+    private TextView bloodPressureSbp;
     private Switch singleView;
     private TextView rightTitle;
     private ImageView animView;
@@ -87,7 +88,8 @@ public class HeartBeatFragment extends BaseFragment {
             }
             bloodTestState.setText(getString(R.string.blood_pressure_test_ing));
             bloodBtnView.setText(getString(R.string.blood_stop));
-            bloodPressureView.setText("0/0");
+            bloodPressureDbp.setText("0");
+            bloodPressureSbp.setText("0");
         }
 
         @Override
@@ -115,7 +117,8 @@ public class HeartBeatFragment extends BaseFragment {
 
         @Override
         public void onGetBloodPressSuccess(int sbp, int dbp) {
-            bloodPressureView.setText(String.valueOf(sbp)+"/"+String.valueOf(dbp));
+            bloodPressureDbp.setText(String.valueOf(dbp));
+            bloodPressureSbp.setText(String.valueOf(sbp));
         }
 
     };
@@ -190,7 +193,8 @@ public class HeartBeatFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.layout_heartbeat, container, false);
         heartbeatView = (TextView) root.findViewById(R.id.tv_heartbeat);
-        bloodPressureView = (TextView) root.findViewById(R.id.blood_pressure);
+        bloodPressureDbp = (TextView) root.findViewById(R.id.blood_pressure_dbp);
+        bloodPressureSbp = (TextView) root.findViewById(R.id.blood_pressure_sbp);
         bloodBtnView = (Button)root.findViewById(R.id.blood_test);
         bloodTestState = (TextView)root.findViewById(R.id.blood_test_des);
         animView = (ImageView) root.findViewById(R.id.iv_anim);

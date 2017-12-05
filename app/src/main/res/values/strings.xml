@@ -56,9 +56,6 @@
     <string name="heartbeat_title">心率</string>
     <string name="heartbeat_start">开始</string>
     <string name="heartbeat_unit">"次/分钟"</string>
-    <string name="heartbeat_pressure_unit">"千帕"</string>
-    <string name="heartbeat_spb">"舒展压"</string>
-    <string name="heartbeat_dpb">"收缩压"</string>
     <string name="heartbeat_prompt">"运动心跳加快属正常现象，请不要担心 。心跳信息仅供参考。"</string>
     <string name="heartbeat_testing">"测定心率中..."</string>
     <string name="heartbeat_stop">结束</string>
@@ -77,7 +74,8 @@
     <string name="blood_pressure_test_ing">"血压测试中..."</string>
     <string name="blood_stop">"结束"</string>
     <string name="blood_kpa">"千帕"</string>
-
+    <string name="blood_sbp">"高压"</string>
+    <string name="blood_dbp">"低压"</string>
 
 
     <!-- 运动界面 -->
