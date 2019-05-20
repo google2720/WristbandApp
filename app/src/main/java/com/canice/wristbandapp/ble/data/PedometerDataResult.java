@@ -59,6 +59,16 @@ public class PedometerDataResult extends Data {
         return data[11] & 0xff;
     }
 
+    public boolean isTestException() {
+        if (data[13] == 0x00) {
+            return false;
+        } else if (data[13] == 0x01) {
+            return true;
+        }
+        return false;
+    }
+
+
     public int getDBPData() {
         return data[12] & 0xff;
     }

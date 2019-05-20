@@ -143,6 +143,9 @@ public class HeartRateHelper {
                             first = false;
                             closeHeartRateAsync(20 * 1000);
                         }
+                        if( r.isTestException()) {
+                            closeHeartRateAsync(0);
+                        }
                     }
                     if (isStart()) {
                         SystemClock.sleep(2000);

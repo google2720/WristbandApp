@@ -138,8 +138,9 @@ public class BloodPressHelper {
                         }
                     }
                     if (isStart() && r != null) {
+
                         ble.getCallbacks().onGetBloodPressSuccess(r.getSBPData(),r.getDBPData());
-                        if (!isStart()) {
+                        if (!isStart() || r.isTestException()) {
                             closeBloodPressAsync(0);
                         }
                     }

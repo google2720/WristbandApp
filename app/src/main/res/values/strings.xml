@@ -73,7 +73,7 @@
     <string name="blood_start_stop_ing">"血压测试结束中..."</string>
     <string name="blood_pressure_test_ing">"血压测试中..."</string>
     <string name="blood_stop">"结束"</string>
-    <string name="blood_kpa">"千帕"</string>
+    <string name="blood_kpa">"mmHg"</string>
     <string name="blood_sbp">"高压"</string>
     <string name="blood_dbp">"低压"</string>
 

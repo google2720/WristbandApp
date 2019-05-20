@@ -64,8 +64,8 @@ public class PersonalFragment extends BaseFragment implements OnClickListener {
         nickNameView = (TextView) view.findViewById(R.id.nick_name);
         HeadView = (ImageView) view.findViewById(R.id.imageview_user_head);
         if (BuildConfig.newFit){
-            view.findViewById(R.id.personal_sos_setup).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.rl_personal_anti_lost).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.personal_sos_setup).setVisibility(View.GONE);
+            view.findViewById(R.id.rl_personal_anti_lost).setVisibility(View.GONE);
         }else{
             view.findViewById(R.id.personal_sos_setup).setVisibility(View.GONE);
             view.findViewById(R.id.rl_personal_anti_lost).setVisibility(View.GONE);

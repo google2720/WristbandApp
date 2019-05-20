@@ -73,10 +73,12 @@ public class SmsReceivedService extends Service {
      * 解析接收的短信
      */
     private void parser(final Intent intent) {
-        SmsMessage[] messages = getMessagesFromIntent(intent);
-        for (SmsMessage message : messages) {
-            String address = message.getOriginatingAddress();
-            BleController.getInstance().sendMessageRemindAsync(address);
+        if(UserController.isSmsRemind(getApplicationContext())) {
+            SmsMessage[] messages = getMessagesFromIntent(intent);
+            for (SmsMessage message : messages) {
+                String address = message.getOriginatingAddress();
+                BleController.getInstance().sendMessageRemindAsync(address);
+            }
         }
     }
 
